@@ -1704,5 +1704,216 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 5 Y 6 CORREGIDA: SISTEMA DE NAVEGACIÓN SIN BUGS   -->
+<!-- ======================================================== -->
+
+<!-- Contenedor del Buscador de Códigos (Se inyectará en el menú) -->
+<div id="contenedor-codigo-secreto" style="display: none; margin-top: 25px; text-align: center; z-index: 10; position: relative;">
+  <input type="text" id="input-codigo" placeholder="🔑 Ingresar código secreto..." 
+         style="padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid white; background: #111; color: white; text-align: center; width: 220px;">
+  <button onclick="verificarCodigo()" 
+          style="padding: 10px 20px; font-size: 16px; font-weight: bold; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; margin-left: 10px; transition: 0.3s;">
+    Activar
+  </button>
+  <p id="mensaje-codigo" style="margin-top: 10px; font-size: 14px; font-weight: bold; min-height: 20px;"></p>
+</div>
+
+<!-- 🎵 AUDIO TENEBROSO 🎵 -->
+<audio id="audio-tenebroso" loop src="https://assets.mixkit.co/music/preview/mixkit-creepy-hollow-1191.mp3"></audio>
+
+<!-- 🎨 ESTILOS DE LOS MODOS (CON REFUERZO !IMPORTANT PARA EVITAR BUGS) 🎨 -->
+<style>
+/* MODO ADMIN FIESTA */
+body.modo-fiesta, body.modo-fiesta div:not(.visor-paisajes) {
+  background: linear-gradient(125deg, #ff007f, #7f00ff, #00ffff, #ff007f) !important;
+  background-size: 400% 400% !important;
+  animation: fondoFiesta 6s ease infinite !important;
+}
+@keyframes fondoFiesta {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.modo-fiesta-letras {
+  color: #fff !important;
+  text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #00ffff !important;
+  animation: arcoirisTexto 2s infinite linear !important;
+}
+@keyframes arcoirisTexto {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+.modo-fiesta-boton {
+  background: linear-gradient(45deg, #00ffff, #ff00ff) !important;
+  color: white !important;
+  font-weight: bold !important;
+  box-shadow: 0 0 25px #ff00ff !important;
+  border: none !important;
+}
+
+/* MODO TENEBROSO */
+body.modo-tenebroso, body.modo-tenebroso div:not(.visor-paisajes) {
+  background: #0a0101 !important;
+  box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.3) !important;
+}
+.modo-tenebroso-letras {
+  color: #ff3333 !important;
+  text-shadow: 0 0 15px #ff0000, 0 0 30px #550000 !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+.modo-tenebroso-boton {
+  background: #220000 !important;
+  color: #ff3333 !important;
+  border: 1px solid #ff0000 !important;
+  box-shadow: 0 0 15px #550000 !important;
+}
+</style>
+
+<!-- 🧠 SCRIPT REHECHO DESDE CERO PARA CONTROLAR NAVEGACIÓN SIN BUGS 🧠 -->
+<script>
+// Guardará qué modo está activo actualmente ("normal", "fiesta", "tenebroso")
+let modoActual = "normal"; 
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Mover el contenedor de códigos al menú principal automáticamente
+  const menuCentral = document.getElementById("menu-principal");
+  const contenedorCodigo = document.getElementById("contenedor-codigo-secreto");
+  if (menuCentral && contenedorCodigo) {
+    menuCentral.appendChild(contenedorCodigo);
+  }
+});
+
+// NUEVA FUNCIÓN DE NAVEGACIÓN ABSOLUTA (CORRIGE EL BUG DE SALIR)
+function abrirSeccion(idSeccion) {
+  // 1. Ocultar absolutamente todas las pantallas primero
+  const pantallas = ['menu-principal', 'seccion-ruleta', 'seccion-juego', 'seccion-paisajes'];
+  pantallas.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+
+  // 2. Mostrar únicamente la pantalla que queremos abrir
+  const pantallaActiva = document.getElementById(idSeccion);
+  if(pantallaActiva) {
+    pantallaActiva.style.display = 'block';
+  }
+
+  // 3. Control de visualización de la barra de códigos (solo en el menú)
+  const contenedorCodigo = document.getElementById("contenedor-codigo-secreto");
+  if(contenedorCodigo) {
+    contenedorCodigo.style.display = (idSeccion === 'menu-principal') ? 'block' : 'none';
+  }
+
+  // 4. Control de música automático respetando el Modo Tenebroso
+  apagarTodaLaMusica();
+  if (modoActual === "tenebroso") {
+    reproducirPista('audio-tenebroso');
+  } else {
+    if (idSeccion === 'menu-principal') reproducirPista('audio-menu');
+    else if (idSeccion === 'seccion-ruleta') reproducirPista('audio-ruleta');
+    else if (idSeccion === 'seccion-juego') reproducirPista('audio-juego');
+    else if (idSeccion === 'seccion-paisajes') {
+      reproducirPista('audio-paisajes');
+      if(typeof mostrarFotoPaisaje === 'function') mostrarFotoPaisaje();
+    }
+  }
+
+  // Rediseñar dinámicamente los elementos de la nueva sección abierta si hay un modo activo
+  actualizarEstilosVisuales();
+}
+
+// VERIFICADOR DE CÓDIGOS MEJORADO
+function verificarCodigo() {
+  const input = document.getElementById("input-codigo");
+  const mensaje = document.getElementById("mensaje-codigo");
+  const codigo = input.value.trim();
+
+  // Resetear clases viejas
+  limpiarEstilosClases();
+
+  if (codigo === "132611") {
+    modoActual = "fiesta";
+    document.body.classList.add("modo-fiesta");
+    mensaje.style.color = "#00ffcc";
+    mensaje.innerText = "⚡ MODO ADMIN FIESTA ACTIVADO ⚡";
+    input.value = "";
+  } 
+  else if (codigo === "230118") {
+    modoActual = "tenebroso";
+    document.body.classList.add("modo-tenebroso");
+    mensaje.style.color = "#ff3333";
+    mensaje.innerText = "👁️ VibLOX está maldito... 👁️";
+    input.value = "";
+  } 
+  else if (codigo.toLowerCase() === "normal" || codigo.toLowerCase() === "limpiar") {
+    modoActual = "normal";
+    mensaje.style.color = "white";
+    mensaje.innerText = "Página restablecida.";
+    input.value = "";
+  } 
+  else {
+    mensaje.style.color = "#ff3366";
+    mensaje.innerText = "❌ Código incorrecto.";
+    return;
+  }
+
+  // Aplicar cambios musicales y visuales al instante
+  const seccionActual = determinarSeccionVisible();
+  abrirSeccion(seccionActual);
+}
+
+// Aplica las fuentes y colores del modo actual a los nuevos botones que aparezcan en pantalla
+function actualizarEstilosVisuales() {
+  if (modoActual === "fiesta") {
+    document.querySelectorAll("h1, h2, h3, .titulo-marca, .titulo-paisajes, .titulo-empresa-ruleta")
+            .forEach(el => el.classList.add("modo-fiesta-letras"));
+    document.querySelectorAll("button, .boton-menu-principal, .boton-volver, .boton-cambiar-foto, .boton-girar")
+            .forEach(btn => btn.classList.add("modo-fiesta-boton"));
+  } else if (modoActual === "tenebroso") {
+    document.querySelectorAll("h1, h2, h3, p, span, li, .titulo-marca, .titulo-paisajes, .titulo-empresa-ruleta")
+            .forEach(el => el.classList.add("modo-tenebroso-letras"));
+    document.querySelectorAll("button, .boton-menu-principal, .boton-volver, .boton-cambiar-foto, .boton-girar")
+            .forEach(btn => btn.classList.add("modo-tenebroso-boton"));
+  }
+}
+
+function limpiarEstilosClases() {
+  document.body.classList.remove("modo-fiesta", "modo-tenebroso");
+  document.querySelectorAll("*").forEach(el => {
+    el.classList.remove("modo-fiesta-letras", "modo-fiesta-boton", "modo-tenebroso-letras", "modo-tenebroso-boton");
+  });
+}
+
+function determinarSeccionVisible() {
+  if (document.getElementById('seccion-ruleta')?.style.display === 'block') return 'seccion-ruleta';
+  if (document.getElementById('seccion-juego')?.style.display === 'block') return 'seccion-juego';
+  if (document.getElementById('seccion-paisajes')?.style.display === 'block') return 'seccion-paisajes';
+  return 'menu-principal';
+}
+
+function reproducirPista(idAudio) {
+  const pista = document.getElementById(idAudio);
+  if(pista) {
+    pista.currentTime = 0;
+    pista.play().catch(e => console.log("Audio esperando interacción..."));
+  }
+}
+
+function apagarTodaLaMusica() {
+  const pistas = ['audio-menu', 'audio-ruleta', 'audio-juego', 'audio-paisajes', 'audio-tenebroso', 'musica-global-viblox'];
+  pistas.forEach(id => {
+    const pista = document.getElementById(id);
+    if(pista) pista.pause();
+  });
+}
+
+// Sobrescribir la función entrar para que use la nueva lógica limpia
+function entrar() {
+  const contenedorInicio = document.querySelector('.contenedor');
+  if(contenedorInicio) contenedorInicio.style.display = 'none';
+  abrirSeccion('menu-principal');
+}
+</script>
 </body>
 </html>
