@@ -1183,5 +1183,226 @@ function salirDelJuego() {
   abrirSeccion('menu-principal');
 }
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 4: MÚSICA, AUDIO Y SECCIÓN DE PAISAJES RELAJANTES -->
+<!-- ======================================================== -->
+
+<!-- SECTION 4: PANTALLA DE PAISAJES (Oculta al inicio) -->
+<div id="seccion-paisajes" class="pantalla-paisajes">
+  <h2 class="titulo-paisajes">PAISAJES VIBLOX</h2>
+  <p class="subtitulo-paisajes">Disfruta de la vista y relájate con la música ambiental</p>
+
+  <!-- Contenedor del Visor de Fotos -->
+  <div class="visor-paisajes">
+    <img id="foto-paisaje-actual" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000" alt="Paisaje Hermoso">
+    
+    <!-- Controles para cambiar de foto -->
+    <div class="controles-paisaje">
+      <button class="boton-cambiar-foto" onclick="cambiarFoto(-1)">◀️ Anterior</button>
+      <button class="boton-cambiar-foto" onclick="cambiarFoto(1)">Siguiente ▶️</button>
+    </div>
+  </div>
+
+  <!-- Botón para regresar al menú central -->
+  <button class="boton-volver" onclick="abrirSeccion('menu-principal')">⬅️ Volver al Menú</button>
+</div>
+
+
+<!-- 🎵 ELEMENTOS DE AUDIO (Música para cada sección) 🎵 -->
+<audio id="audio-menu" loop src="https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3"></audio>
+<audio id="audio-ruleta" loop src="https://assets.mixkit.co/music/preview/mixkit-casino-bling-27.mp3"></audio>
+<audio id="audio-juego" loop src="https://assets.mixkit.co/music/preview/mixkit-complex-motivation-1143.mp3"></audio>
+<audio id="audio-paisajes" loop src="https://assets.mixkit.co/music/preview/mixkit-serene-view-1172.mp3"></audio>
+
+
+<!-- 🎨 ESTILOS CSS ADICIONALES PARA PAISAJES Y DISEÑO LARGO 🎨 -->
+<style>
+/* Diseño de la nueva sección de paisajes */
+.pantalla-paisajes {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 750px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.6s ease-out;
+}
+
+body #seccion-paisajes {
+  display: none;
+}
+
+.titulo-paisajes {
+  font-size: 40px;
+  letter-spacing: 4px;
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  margin: 0 0 5px 0;
+}
+
+.subtitulo-paisajes {
+  font-size: 16px;
+  opacity: 0.7;
+  margin: 0 0 25px 0;
+}
+
+.visor-paisajes {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 15px;
+  box-sizing: border-box;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.visor-paisajes img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: opacity 0.4s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 600px) {
+  .visor-paisajes img {
+    height: 250px;
+  }
+}
+
+.controles-paisaje {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.boton-cambiar-foto {
+  padding: 10px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-cambiar-foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px white;
+}
+</style>
+
+
+<!-- 🧠 SCRIPT LARGO INTELIGENTE PARA CONTROL DE AUDIO Y FOTOS 🧠 -->
+<script>
+// --- BANCO DE FOTOS DE PAISAJES ---
+const listaFotos = [
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000", // Montañas y reflejo
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000", // Bosque con niebla
+  "https://images.unsplash.com/photo-1472214222541-d510753a8707?q=80&w=1000", // Valle verde brillante
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000", // Playa al atardecer
+  "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1000"  // Bosque mágico sol radiante
+];
+let indiceFotoActual = 0;
+
+// Agregar dinámicamente el botón de "Paisajes" al menú central
+document.addEventListener("DOMContentLoaded", () => {
+  const contenedorBotones = document.querySelector(".contenedor-botones-menu");
+  if (contenedorBotones) {
+    // Creamos el botón de Paisajes Relajantes
+    const nuevoBoton = document.createElement("button");
+    nuevoBoton.className = "boton-menu-principal";
+    nuevoBoton.innerHTML = "🍃 Paisajes Relajantes";
+    nuevoBoton.setAttribute("onclick", "abrirSeccion('seccion-paisajes')");
+    contenedorBotones.appendChild(nuevoBoton);
+  }
+});
+
+// Modificamos la navegación para apagar/encender la música correspondiente
+const funcionNavegacionConAudio = abrirSeccion;
+abrirSeccion = function(idSeccion) {
+  // Apagar todos los reproductores de música antes de cambiar
+  apagarTodaLaMusica();
+
+  // Esconder todas las secciones existentes
+  document.getElementById('menu-principal').style.display = 'none';
+  document.getElementById('seccion-ruleta').style.display = 'none';
+  if(document.getElementById('seccion-juego')) document.getElementById('seccion-juego').style.display = 'none';
+  document.getElementById('seccion-paisajes').style.display = 'none';
+
+  // Mostrar la sección activa
+  document.getElementById(idSeccion).style.display = 'block';
+
+  // Encender la música de la sección correspondiente
+  if (idSeccion === 'menu-principal') {
+    reproducirMusica('audio-menu');
+  } else if (idSeccion === 'seccion-ruleta') {
+    reproducirMusica('audio-ruleta');
+    setTimeout(inicializarRuleta, 50);
+  } else if (idSeccion === 'seccion-juego') {
+    reproducirMusica('audio-juego');
+    setTimeout(iniciarJuego, 50);
+  } else if (idSeccion === 'seccion-paisajes') {
+    reproducirMusica('audio-paisajes');
+    mostrarFotoPaisaje();
+  }
+}
+
+// Funciones controladoras de audio
+function reproducirMusica(idAudio) {
+  const pista = document.getElementById(idAudio);
+  if (pista) {
+    pista.currentTime = 0; // Inicia desde el principio
+    pista.play().catch(error => {
+      console.log("El navegador bloqueó el auto-play inicial hasta que el usuario interactúe.");
+    });
+  }
+}
+
+function apagarTodaLaMusica() {
+  const audios = ['audio-menu', 'audio-ruleta', 'audio-juego', 'audio-paisajes'];
+  audios.forEach(id => {
+    const pista = document.getElementById(id);
+    if (pista) {
+      pista.pause();
+    }
+  });
+}
+
+// Funciones para el carrusel de Paisajes
+function mostrarFotoPaisaje() {
+  const imgElemento = document.getElementById("foto-paisaje-actual");
+  if (imgElemento) {
+    imgElemento.style.opacity = 0; // Efecto transición
+    setTimeout(() => {
+      imgElemento.src = listaFotos[indiceFotoActual];
+      imgElemento.style.opacity = 1;
+    }, 200);
+  }
+}
+
+function cambiarFoto(direccion) {
+  indiceFotoActual += direccion;
+  
+  // Ciclo infinito para el carrusel
+  if (indiceFotoActual >= listaFotos.length) {
+    indiceFotoActual = 0;
+  }
+  if (indiceFotoActual < 0) {
+    indiceFotoActual = listaFotos.length - 1;
+  }
+  
+  mostrarFotoPaisaje();
+}
+</script>
 </body>
 </html>
