@@ -1404,5 +1404,201 @@ function cambiarFoto(direccion) {
   mostrarFotoPaisaje();
 }
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 5: SISTEMA DE CÓDIGOS SECRETOS (MODOS ESPECIALES) -->
+<!-- ======================================================== -->
+
+<!-- Botón flotante para ingresar códigos en el Menú Principal -->
+<div id="contenedor-codigo-secreto" style="display: none; margin-top: 25px; text-align: center; z-index: 6; position: relative;">
+  <input type="text" id="input-codigo" placeholder="🔑 Ingresar código secreto..." 
+         style="padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid white; background: #111; color: white; text-align: center; width: 220px;">
+  <button onclick="verificarCodigo()" 
+          style="padding: 10px 20px; font-size: 16px; font-weight: bold; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; margin-left: 10px; transition: 0.3s;">
+    Activar
+  </button>
+  <p id="mensaje-codigo" style="margin-top: 10px; font-size: 14px; font-weight: bold; min-height: 20px;"></p>
+</div>
+
+<!-- 🎵 NUEVA MÚSICA TENEBROSA LIBRE DE DERECHOS 🎵 -->
+<audio id="audio-tenebroso" loop src="https://assets.mixkit.co/music/preview/mixkit-creepy-hollow-1191.mp3"></audio>
+
+
+<!-- 🎨 ESTILOS PARA LOS MODOS ESPECIALES (FIESTA Y TENEBROSO) 🎨 -->
+<style>
+/* --- EFECTOS MODO ADMIN FIESTA --- */
+.modo-fiesta {
+  background: linear-gradient(125deg, #ff007f, #7f00ff, #00ffff, #ff007f) !important;
+  background-size: 400% 400% !important;
+  animation: fondoFiesta 6s ease infinite, vibrarPantalla 0.2s infinite alternate !important;
+}
+
+@keyframes fondoFiesta {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.modo-fiesta-letras {
+  color: #fff !important;
+  text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #00ffff, 0 0 40px #ff00ff !important;
+  animation: arcoirisTexto 2s infinite linear !important;
+}
+
+@keyframes arcoirisTexto {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.modo-fiesta-boton {
+  background: linear-gradient(45deg, #00ffff, #ff00ff) !important;
+  color: white !important;
+  font-weight: bold !important;
+  box-shadow: 0 0 25px #ff00ff !important;
+  border: none !important;
+  animation: saltar 0.4s infinite alternate;
+}
+
+@keyframes saltar {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-5px) scale(1.05); }
+}
+
+/* --- EFECTOS MODO TENEBROSO --- */
+.modo-tenebroso {
+  background: #050000 !important;
+  animation: parpadeoRojo 4s infinite, temblorTerror 0.5s infinite alternate !important;
+}
+
+@keyframes parpadeoRojo {
+  0%, 100% { box-shadow: inset 0 0 50px rgba(0,0,0,1); }
+  50% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.4); }
+}
+
+.modo-tenebroso-letras {
+  color: #ff3333 !important;
+  text-shadow: 0 0 15px #ff0000, 0 0 30px #550000 !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  letter-spacing: 4px !important;
+}
+
+.modo-tenebroso-boton {
+  background: #220000 !important;
+  color: #ff3333 !important;
+  border: 1px solid #ff0000 !important;
+  box-shadow: 0 0 15px #550000 !important;
+}
+</style>
+
+
+<!-- 🧠 SCRIPT INTELIGENTE PARA CONTROLAR CÓDIGOS Y AUDIO 🧠 -->
+<script>
+// Forzar el botón de códigos en el menú principal al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  const menuCentral = document.getElementById("menu-principal");
+  const contenedorCodigo = document.getElementById("contenedor-codigo-secreto");
+  if (menuCentral && contenedorCodigo) {
+    // Metemos el buscador de códigos abajo de los botones del menú
+    menuCentral.appendChild(contenedorCodigo);
+  }
+});
+
+// REARREGLO DE LA FUNCIÓN ENTRAR PARA QUE SÍ SUENE LA MÚSICA
+function entrar() {
+  // Ocultar inicio
+  document.querySelector('.contenedor').style.display = 'none';
+  
+  // Mostrar menú principal
+  abrirSeccion('menu-principal');
+  
+  // SOLUCIÓN AL AUDIO: Activar el contexto de audio tras el clic del usuario
+  const audioM = document.getElementById('audio-menu');
+  if(audioM) {
+    audioM.play().catch(e => console.log("Permiso de audio en proceso..."));
+  }
+}
+
+// FUNCIÓN PARA VERIFICAR LOS CÓDIGOS SECRETOS
+function verificarCodigo() {
+  const input = document.getElementById("input-codigo");
+  const mensaje = document.getElementById("mensaje-codigo");
+  const codigo = input.value.trim();
+  
+  // Limpiar clases previas antes de aplicar un modo nuevo
+  desactivarModosEspeciales();
+
+  if (codigo === "132611") {
+    // --- ACTIVAR MODO ADMIN FIESTA ---
+    document.body.classList.add("modo-fiesta");
+    
+    // Aplicar estilos locos a títulos y botones
+    document.querySelectorAll("h1, h2, .titulo-marca, .titulo-empresa-ruleta, .titulo-juego, .titulo-paisajes")
+            .forEach(el => el.classList.add("modo-fiesta-letras"));
+    document.querySelectorAll(".boton-menu-principal, .boton-girar, .boton-cambiar-foto")
+            .forEach(btn => btn.classList.add("modo-fiesta-boton"));
+            
+    mensaje.style.color = "#00ffcc";
+    mensaje.innerText = "⚡ ¡MODO ADMIN FIESTA ACTIVADO! ⚡";
+    input.value = "";
+    
+  } else if (codigo === "230118") {
+    // --- ACTIVAR MODO TENEBROSO ---
+    document.body.classList.add("modo-tenebroso");
+    
+    // Cambiar música de fondo a terrorífica
+    apagarTodaLaMusica();
+    const audioTerror = document.getElementById("audio-tenebroso");
+    if(audioTerror) audioTerror.play();
+    
+    // Aplicar estilos de terror a títulos y botones
+    document.querySelectorAll("h1, h2, p, span, strong, .titulo-marca, .subtitulo-marca")
+            .forEach(el => el.classList.add("modo-tenebroso-letras"));
+    document.querySelectorAll(".boton-menu-principal, .boton-girar, .boton-cambiar-foto")
+            .forEach(btn => btn.classList.add("modo-tenebroso-boton"));
+            
+    mensaje.style.color = "#ff3333";
+    mensaje.innerText = "👁️ VibLOX está maldito... 👁️";
+    input.value = "";
+    
+  } else if (codigo.toLowerCase() === "limpiar" || codigo.toLowerCase() === "normal") {
+    mensaje.style.color = "white";
+    mensaje.innerText = "Página devuelta a la normalidad.";
+    input.value = "";
+    abrirSeccion('menu-principal'); // Reinicia la música normal
+  } else {
+    mensaje.style.color = "#ff3366";
+    mensaje.innerText = "❌ Código incorrecto. Intenta de nuevo.";
+  }
+}
+
+function desactivarModosEspeciales() {
+  // Quitar clases del cuerpo
+  document.body.classList.remove("modo-fiesta", "modo-tenebroso");
+  
+  // Apagar música de terror si estaba sonando
+  const audioTerror = document.getElementById("audio-tenebroso");
+  if(audioTerror) audioTerror.pause();
+
+  // Remover clases de los elementos
+  document.querySelectorAll("*").forEach(el => {
+    el.classList.remove("modo-fiesta-letras", "modo-fiesta-boton", "modo-tenebroso-letras", "modo-tenebroso-boton");
+  });
+}
+
+// Mostrar el buscador de códigos solo cuando estemos en el menú principal
+const funcionNavegacionCodigos = abrirSeccion;
+abrirSeccion = function(idSeccion) {
+  // Ejecutamos el cambio de música y pantallas del script anterior
+  funcionNavegacionConAudio(idSeccion);
+  
+  const contenedorCodigo = document.getElementById("contenedor-codigo-secreto");
+  if(contenedorCodigo) {
+    if (idSeccion === 'menu-principal') {
+      contenedorCodigo.style.display = 'block';
+    } else {
+      contenedorCodigo.style.display = 'none';
+    }
+  }
+}
+</script>
 </body>
 </html>
