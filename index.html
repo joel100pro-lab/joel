@@ -186,58 +186,138 @@ document.body.appendChild(estrella);
 crearEstrellas();
 
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 2: MENU CENTRAL Y RULETA (Pega justo arriba de </body>) -->
+<!-- ======================================================== -->
 
-<div id="seccion-ruleta" class="pantalla-negra">
-  <h1 class="titulo-empresa">VIBLOX STUDIOS</h1>
-  <p class="subtitulo-ruleta">¡Prueba tu suerte en nuestra ruleta aleatoria!</p>
+<!-- SECTION 1: MENÚ PRINCIPAL INTERMEDIO (Oculto al inicio) -->
+<div id="menu-principal" class="menu-central">
+  <h1 class="titulo-marca">VIBLOX STUDIOS</h1>
+  <p class="subtitulo-marca">Centro de Entretenimiento y Diseños Exclusivos</p>
+
+  <div class="contenedor-botones-menu">
+    <!-- Botón para abrir la Ruleta -->
+    <button class="boton-menu-principal" onclick="abrirSeccion('seccion-ruleta')">
+      🎰 Probar Suerte (Ruleta)
+    </button>
+    
+    <!-- Botón de muestra para el futuro (Desactivado por ahora) -->
+    <button class="boton-menu-principal proximamente" disabled>
+      👕 Catálogo de Ropa (Próximamente)
+    </button>
+  </div>
+</div>
+
+
+<!-- SECTION 2: LA RULETA (Oculta al inicio) -->
+<div id="seccion-ruleta" class="pantalla-ruleta">
+  <h2 class="titulo-empresa-ruleta">VIBLOX STUDIOS</h2>
+  <p class="subtitulo-ruleta">¡Gira y gana premios exclusivos!</p>
 
   <div class="contenedor-ruleta">
     <div class="marcador-ruleta">⬇️</div>
-    <canvas id="ruletaCanvas" width="400" height="400"></canvas>
+    <canvas id="ruletaCanvas" width="360" height="360"></canvas>
     <button class="boton-girar" onclick="girarRuleta()">GIRAR</button>
   </div>
 
   <div id="mensaje-premio" class="premio-texto"></div>
+  
+  <!-- Botón para regresar al menú central -->
+  <button class="boton-volver" onclick="abrirSeccion('menu-principal')">⬅️ Volver al Menú</button>
 </div>
 
+
+<!-- 🎨 ESTILOS CSS PARA EL MENÚ Y LA RULETA 🎨 -->
 <style>
-.pantalla-negra {
-  display: none; /* Se activa al presionar ENTRAR */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: black;
-  color: white;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
-  padding: 20px;
-}
-
-/* Forzar que se oculte al cargar la página */
-body #seccion-ruleta {
+/* Estilos del Menú Central */
+.menu-central {
   display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.5s ease-out;
 }
 
-.titulo-empresa {
-  font-size: 50px;
+.titulo-marca {
+  font-size: 55px;
   font-weight: bold;
-  letter-spacing: 5px;
+  letter-spacing: 6px;
   color: white;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
-  margin: 0 0 5px 0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
 }
 
-.subtitulo-ruleta {
+.subtitulo-marca {
   font-size: 18px;
   opacity: 0.7;
-  margin: 0 0 30px 0;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.contenedor-botones-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.boton-menu-principal {
+  width: 100%;
+  max-width: 350px;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-menu-principal:hover:not(:disabled) {
+  background: white;
+  color: black;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px white;
+}
+
+.boton-menu-principal:disabled {
+  border-color: #444;
+  color: #555;
+  cursor: not-allowed;
+}
+
+/* Estilos de la sección Ruleta */
+.pantalla-ruleta {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.5s ease-out;
+}
+
+@keyframes aparecerSuave {
+  from { opacity: 0; transform: translate(-50%, -48%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.titulo-empresa-ruleta {
+  font-size: 38px;
+  letter-spacing: 3px;
+  margin-bottom: 5px;
 }
 
 .contenedor-ruleta {
@@ -245,31 +325,26 @@ body #seccion-ruleta {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
 }
 
 .marcador-ruleta {
-  font-size: 35px;
+  font-size: 30px;
   position: absolute;
-  top: -25px;
-  z-index: 12;
-  animation: rebote 1s infinite alternate;
-}
-
-@keyframes rebote {
-  from { transform: translateY(0); }
-  to { transform: translateY(-5px); }
+  top: -22px;
+  z-index: 10;
 }
 
 #ruletaCanvas {
   border-radius: 50%;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
-  background: #111;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+  background: #0a0a0a;
 }
 
 .boton-girar {
-  margin-top: 25px;
-  padding: 15px 50px;
-  font-size: 22px;
+  margin-top: 20px;
+  padding: 12px 40px;
+  font-size: 18px;
   font-weight: bold;
   color: black;
   background: white;
@@ -277,135 +352,144 @@ body #seccion-ruleta {
   border-radius: 50px;
   cursor: pointer;
   transition: 0.3s;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
-.boton-girar:hover {
+.boton-girar:hover:not(:disabled) {
   transform: scale(1.1);
-  box-shadow: 0 0 25px white;
+  box-shadow: 0 0 15px white;
 }
 
 .boton-girar:disabled {
-  background: #555;
-  color: #888;
+  background: #444;
+  color: #777;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
 .premio-texto {
-  margin-top: 25px;
-  font-size: 24px;
+  margin-top: 15px;
+  font-size: 20px;
   font-weight: bold;
-  min-height: 35px;
-  text-shadow: 0 0 10px white;
-  text-align: center;
+  min-height: 25px;
+}
+
+.boton-volver {
+  margin-top: 30px;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-volver:hover {
+  color: white;
+  border-color: white;
 }
 </style>
 
+
+<!-- 🧠 LÓGICA JAVASCRIPT REESTRUCTURADA 🧠 -->
 <script>
-// 📝 AQUÍ PUEDES PONER LOS NOMBRES QUE TU QUIERAS DE PREMIOS
-const opcionesPremios = [
-  "10 ROBUX 🪙", 
-  "CAMISETA VIP 👕", 
-  "SUERTE LA PRÓXIMA ❌", 
-  "RANGO FAN ⭐", 
-  "50 ROBUX 🪙", 
-  "SHORT EXCLUSIVO 🩳", 
-  "SORPRESA ORO 🎁",
-  "NADA POR AQUÍ 🍃"
-];
+// Lista de premios configurables
+const opcionesPremios = ["10 ROBUX 🪙", "CAMISETA VIP 👕", "SUERTE... ❌", "RANGO FAN ⭐", "50 ROBUX 🪙", "SHORT EXCL. 🩳", "SORPRESA ORO 🎁", "NADA... 🍃"];
+const coloresPremios = ["#111111", "#222222", "#333333", "#1a1a1a", "#2e2e2e", "#444444", "#0a0a0a", "#242424"]; // Tonos oscuros estéticos
 
-// Colores bonitos y modernos para los gajos de la ruleta
-const coloresPremios = ["#ff3366", "#33ccff", "#33ff99", "#ffcc00", "#9933ff", "#ff6600", "#ff33cc", "#444444"];
-
-let canvas = document.getElementById("ruletaCanvas");
-let ctx = canvas.getContext("2d");
-let centro = canvas.width / 2;
+let canvas = null;
+let ctx = null;
+let centro = 0;
 let anguloActual = 0;
 let estaGirando = false;
 
-// Función para dibujar la ruleta con sus textos
+// Al dar clic en ENTRAR en la pantalla de inicio
+function entrar() {
+  document.querySelector('.contenedor').style.display = 'none';
+  abrirSeccion('menu-principal');
+}
+
+// Navegación limpia entre secciones
+function abrirSeccion(idSeccion) {
+  // Esconder el menú y la ruleta
+  document.getElementById('menu-principal').style.display = 'none';
+  document.getElementById('seccion-ruleta').style.display = 'none';
+  
+  // Mostrar la sección elegida
+  document.getElementById(idSeccion).style.display = 'block';
+  
+  // Si abrimos la ruleta, la dibujamos por primera vez
+  if (idSeccion === 'seccion-ruleta') {
+    setTimeout(inicializarRuleta, 50);
+  }
+}
+
+function inicializarRuleta() {
+  canvas = document.getElementById("ruletaCanvas");
+  ctx = canvas.getContext("2d");
+  centro = canvas.width / 2;
+  dibujarRuleta();
+}
+
 function dibujarRuleta() {
+  if (!ctx) return;
   const numOpciones = opcionesPremios.length;
   const arco = (2 * Math.PI) / numOpciones;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let i = 0; i < numOpciones; i++) {
     let anguloGajo = anguloActual + i * arco;
     
-    // Dibujar el gajo de color
     ctx.fillStyle = coloresPremios[i % coloresPremios.length];
     ctx.beginPath();
     ctx.moveTo(centro, centro);
-    ctx.arc(centro, centro, centro - 10, anguloGajo, anguloGajo + arco);
+    ctx.arc(centro, centro, centro - 5, anguloGajo, anguloGajo + arco);
     ctx.lineTo(centro, centro);
     ctx.fill();
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Dibujar el texto del premio dentro del gajo
     ctx.save();
     ctx.fillStyle = "white";
-    ctx.font = "bold 13px Arial";
-    ctx.shadowBlur = 4;
-    ctx.shadowColor = "black";
+    ctx.font = "bold 12px Arial";
     ctx.translate(centro, centro);
     ctx.rotate(anguloGajo + arco / 2);
     ctx.textAlign = "right";
-    ctx.fillText(opcionesPremios[i], centro - 25, 5);
+    ctx.fillText(opcionesPremios[i], centro - 20, 4);
     ctx.restore();
   }
 
-  // Círculo central estético
+  // Centro de la ruleta
   ctx.beginPath();
-  ctx.arc(centro, centro, 25, 0, 2 * Math.PI);
+  ctx.arc(centro, centro, 20, 0, 2 * Math.PI);
   ctx.fillStyle = "white";
   ctx.fill();
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 4;
-  ctx.stroke();
 }
 
-// Modificación de tu función "entrar" original para activar todo
-function entrar() {
-  // Escondemos la pantalla de inicio
-  document.querySelector('.contenedor').style.display = 'none';
-  
-  // Mostramos la ruleta con su diseño negro
-  let ruletaSec = document.getElementById('seccion-ruleta');
-  ruletaSec.style.display = 'flex';
-  
-  // Inicializamos el dibujo de la ruleta
-  dibujarRuleta();
-}
-
-// Función 100% al azar para girar
 function girarRuleta() {
   if (estaGirando) return;
   estaGirando = true;
   document.querySelector(".boton-girar").disabled = true;
-  document.getElementById("mensaje-premio").innerText = "🎰 Girando la suerte...";
+  document.getElementById("mensaje-premio").innerText = "🎰 Girando...";
 
-  const girosBase = 5 + Math.random() * 5; // Entre 5 y 10 vueltas completas
+  const girosBase = 6 + Math.random() * 4;
   const anguloFinal = girosBase * 2 * Math.PI + Math.random() * 2 * Math.PI;
-  const tiempoTotal = 4000; // 4 segundos de giro fluido
+  const tiempoTotal = 3500;
   let tiempoInicio = null;
 
-  function animarGiro(tiempoActual) {
+  function animar(tiempoActual) {
     if (!tiempoInicio) tiempoInicio = tiempoActual;
     let progreso = tiempoActual - tiempoInicio;
     
     if (progreso < tiempoTotal) {
-      // Efecto de frenado suave (Ease-out)
       let t = progreso / tiempoTotal;
       let easeOut = 1 - Math.pow(1 - t, 3);
       anguloActual = easeOut * anguloFinal;
-      
       dibujarRuleta();
-      requestAnimationFrame(animarGiro);
+      requestAnimationFrame(animar);
     } else {
-      // Se detiene el giro por completo
       anguloActual = anguloFinal % (2 * Math.PI);
       dibujarRuleta();
       calcularPremio();
@@ -413,22 +497,17 @@ function girarRuleta() {
       document.querySelector(".boton-girar").disabled = false;
     }
   }
-  requestAnimationFrame(animarGiro);
+  requestAnimationFrame(animar);
 }
 
-// Calcular qué premio tocó según la posición del marcador de arriba
 function calcularPremio() {
   const numOpciones = opcionesPremios.length;
   const arco = (2 * Math.PI) / numOpciones;
-  
-  // Ajustamos el ángulo porque el marcador está arriba (-90 grados en radianes)
   let anguloMarcador = (3 * Math.PI) / 2 - anguloActual;
   while (anguloMarcador < 0) anguloMarcador += 2 * Math.PI;
   
   let indiceGanador = Math.floor(anguloMarcador / arco) % numOpciones;
-  let premioGanado = opcionesPremios[indiceGanador];
-
-  document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + premioGanado + "!";
+  document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + opcionesPremios[indiceGanador] + "!";
 }
 </script>
 </body>
