@@ -834,5 +834,354 @@ function calcularPremio() {
   document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + opcionesPremios[indiceGanador] + "!";
 }
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 3: JUEGO SORPRESA "COSMIC CLICKER" (Pega arriba de </body>) -->
+<!-- ======================================================== -->
+
+<!-- SECTION 3: PANTALLA DEL JUEGO (Oculta al inicio) -->
+<div id="seccion-juego" class="pantalla-juego">
+  <h2 class="titulo-juego">COSMIC CLICKER 🚀</h2>
+  
+  <div class="marcador-juego">
+    <span>Puntos: <strong id="puntos-txt">0</strong></span>
+    <span>Tiempo: <strong id="tiempo-txt">30</strong>s</span>
+  </div>
+
+  <!-- Lienzo del juego -->
+  <div class="contenedor-canvas-juego">
+    <canvas id="juegoCanvas" width="360" height="450"></canvas>
+    
+    <!-- Pantalla de Game Over Interna -->
+    <div id="pantalla-gameover" class="overlay-gameover">
+      <h3>¡TIEMPO TERMINADO!</h3>
+      <p>Puntuación final: <span id="puntos-finales">0</span></p>
+      <button class="boton-girar" onclick="reiniciarJuego()">Jugar de Nuevo 🎮</button>
+    </div>
+  </div>
+
+  <p class="instrucciones-juego">📱 Toca las gemas verdes y doradas. ¡Evita los meteoritos rojos! 💥</p>
+  
+  <!-- Botón para regresar al menú central -->
+  <button class="boton-volver" onclick="salirDelJuego()">⬅️ Volver al Menú</button>
+</div>
+
+<!-- 🎨 ESTILOS CSS PARA EL JUEGO 🎨 -->
+<style>
+.pantalla-juego {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.5s ease-out;
+}
+
+body #seccion-juego {
+  display: none;
+}
+
+.titulo-juego {
+  font-size: 32px;
+  letter-spacing: 2px;
+  color: white;
+  text-shadow: 0 0 10px #33ccff;
+  margin: 0 0 10px 0;
+}
+
+.marcador-juego {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contenedor-canvas-juego {
+  position: relative;
+  width: 360px;
+  height: 450px;
+  margin: 0 auto;
+}
+
+#juegoCanvas {
+  border: 2px solid white;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 20px rgba(51, 204, 255, 0.2);
+  cursor: crosshair;
+  touch-action: none; /* Evita que el celular haga zoom al tocar rápido */
+}
+
+.overlay-gameover {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 15px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 15;
+}
+
+.overlay-gameover h3 {
+  font-size: 30px;
+  color: #ff3366;
+  text-shadow: 0 0 10px #ff3366;
+  margin-bottom: 10px;
+}
+
+.overlay-gameover p {
+  font-size: 20px;
+  margin-bottom: 25px;
+}
+
+.instrucciones-juego {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 10px;
+}
+</style>
+
+<!-- 🧠 LÓGICA JAVASCRIPT DEL JUEGO 🧠 -->
+<script>
+// VARIABLES DEL JUEGO
+let jCanvas = null;
+let jCtx = null;
+let juegoLoop = null;
+let juegoTiempoInterval = null;
+
+let puntuacion = 0;
+let tiempoRestante = 30;
+let juegoActivo = false;
+
+let elementos = [];
+let particulas = [];
+
+// Activar el botón de juego en el menú central instalando este script
+document.addEventListener("DOMContentLoaded", () => {
+  // Buscamos el segundo botón del menú (el que estaba desactivado)
+  const botones = document.querySelectorAll(".boton-menu-principal");
+  if(botones.length > 1) {
+    botones[1].innerHTML = "🚀 Cosmic Clicker (¡JUGAR!)";
+    botones[1].removeAttribute("disabled");
+    botones[1].classList.remove("proximamente");
+    botones[1].setAttribute("onclick", "abrirSeccion('seccion-juego')");
+  }
+});
+
+// Modificamos la función abrirSeccion que ya tenías para que soporte el juego
+const funcionNavegacionOriginal = abrirSeccion;
+abrirSeccion = function(idSeccion) {
+  // Detener juego si salimos de él
+  if (idSeccion !== 'seccion-juego') {
+    detenerLogicaJuego();
+  }
+
+  // Llamamos a la lógica de pantallas original
+  document.getElementById('menu-principal').style.display = 'none';
+  document.getElementById('seccion-ruleta').style.display = 'none';
+  document.getElementById('seccion-juego').style.display = 'none';
+  
+  document.getElementById(idSeccion).style.display = 'block';
+  
+  if (idSeccion === 'seccion-ruleta') {
+    setTimeout(inicializarRuleta, 50);
+  }
+  if (idSeccion === 'seccion-juego') {
+    setTimeout(iniciarJuego, 50);
+  }
+}
+
+function iniciarJuego() {
+  jCanvas = document.getElementById("juegoCanvas");
+  jCtx = jCanvas.getContext("2d");
+  
+  // Soporte para controles PC y Celular sin lag
+  jCanvas.removeEventListener("pointerdown", procesarToque);
+  jCanvas.addEventListener("pointerdown", procesarToque);
+
+  reiniciarJuego();
+}
+
+function reiniciarJuego() {
+  puntuacion = 0;
+  tiempoRestante = 30;
+  elementos = [];
+  particulas = [];
+  juegoActivo = true;
+  
+  document.getElementById("puntos-txt").innerText = puntuacion;
+  document.getElementById("tiempo-txt").innerText = tiempoRestante;
+  document.getElementById("pantalla-gameover").style.display = "none";
+  
+  clearInterval(juegoTiempoInterval);
+  cancelAnimationFrame(juegoLoop);
+  
+  // Intervalo del cronómetro
+  juegoTiempoInterval = setInterval(() => {
+    if(juegoActivo) {
+      tiempoRestante--;
+      document.getElementById("tiempo-txt").innerText = tiempoRestante;
+      if(tiempoRestante <= 0) {
+        finalizarJuego();
+      }
+    }
+  }, 1000);
+  
+  buclePrincipal();
+}
+
+// BUCLE PRINCIPAL DE ANIMACIÓN (60 FPS)
+function buclePrincipal() {
+  if (!juegoActivo) return;
+  
+  jCtx.clearRect(0, 0, jCanvas.width, jCanvas.height);
+  
+  // Aparecer nuevos objetos al azar
+  if (Math.random() < 0.04) {
+    crearObjeto();
+  }
+  
+  // Mover y dibujar objetos
+  for (let i = elementos.length - 1; i >= 0; i--) {
+    let obj = elementos[i];
+    obj.y += obj.velocidad;
+    
+    // Dibujar círculo brillante
+    jCtx.beginPath();
+    jCtx.arc(obj.x, obj.y, obj.radio, 0, Math.PI * 2);
+    jCtx.fillStyle = obj.color;
+    jCtx.shadowBlur = 15;
+    jCtx.shadowColor = obj.color;
+    jCtx.fill();
+    jCtx.shadowBlur = 0; // Reset
+    
+    // Eliminar si sale de la pantalla
+    if (obj.y - obj.radio > jCanvas.height) {
+      elementos.splice(i, 1);
+    }
+  }
+  
+  // Mover y dibujar partículas de explosión (Efecto especial)
+  for (let i = particulas.length - 1; i >= 0; i--) {
+    let p = particulas[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.alpha -= 0.03;
+    
+    if (p.alpha <= 0) {
+      particulas.splice(i, 1);
+    } else {
+      jCtx.save();
+      jCtx.globalAlpha = p.alpha;
+      jCtx.beginPath();
+      jCtx.arc(p.x, p.y, p.radio, 0, Math.PI * 2);
+      jCtx.fillStyle = p.color;
+      jCtx.fill();
+      jCtx.restore();
+    }
+  }
+  
+  juegoLoop = requestAnimationFrame(buclePrincipal);
+}
+
+function crearObjeto() {
+  const tipos = [
+    { tipo: "gema", color: "#33ff99", radio: 18, velocidad: 2.5 },
+    { tipo: "oro", color: "#ffcc00", radio: 14, velocidad: 4 },
+    { tipo: "bomba", color: "#ff3366", radio: 20, velocidad: 2 }
+  ];
+  
+  // Elegir tipo aleatorio
+  let plantilla = tipos[Math.floor(Math.random() * tipos.length)];
+  
+  elementos.push({
+    x: Math.random() * (jCanvas.width - 40) + 20,
+    y: -20,
+    ...plantilla
+  });
+}
+
+// DETECTAR CLICS / TOQUES (PC Y MÓVIL)
+function procesarToque(e) {
+  if (!juegoActivo) return;
+  
+  // Obtener coordenadas exactas dentro del canvas
+  const rect = jCanvas.getBoundingClientRect();
+  const toqueX = e.clientX - rect.left;
+  const toqueY = e.clientY - rect.top;
+  
+  for (let i = elementos.length - 1; i >= 0; i--) {
+    let obj = elementos[i];
+    
+    // Fórmula de distancia matemática para ver si se tocó el objeto
+    let dist = Math.hypot(toqueX - obj.x, toqueY - obj.y);
+    
+    if (dist < obj.radio + 15) { // Margen extra de toque para pantallas táctiles
+      // Crear explosión de partículas
+      crearExplosion(obj.x, obj.y, obj.color);
+      
+      // Aplicar reglas según el tipo
+      if (obj.tipo === "gema") {
+        puntuacion += 10;
+      } else if (obj.tipo === "oro") {
+        puntuacion += 25;
+      } else if (obj.tipo === "bomba") {
+        puntuacion = Math.max(0, puntuacion - 15); // Resta puntos pero no baja de 0
+      }
+      
+      document.getElementById("puntos-txt").innerText = puntuacion;
+      elementos.splice(i, 1);
+      break; // Rompe para romper solo un objeto por toque
+    }
+  }
+}
+
+function crearExplosion(x, y, color) {
+  for (let i = 0; i < 12; i++) {
+    particulas.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.5) * 6,
+      radio: Math.random() * 3 + 1,
+      color: color,
+      alpha: 1
+    });
+  }
+}
+
+function finalizarJuego() {
+  juegoActivo = false;
+  clearInterval(juegoTiempoInterval);
+  document.getElementById("puntos-finales").innerText = puntuacion;
+  document.getElementById("pantalla-gameover").style.style.display = "flex"; // Forzado en JS
+  document.getElementById("pantalla-gameover").setAttribute("style", "display:flex;");
+}
+
+function detenerLogicaJuego() {
+  juegoActivo = false;
+  clearInterval(juegoTiempoInterval);
+  cancelAnimationFrame(juegoLoop);
+}
+
+function salirDelJuego() {
+  detenerLogicaJuego();
+  abrirSeccion('menu-principal');
+}
+</script>
 </body>
 </html>
