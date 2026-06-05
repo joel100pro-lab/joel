@@ -726,4 +726,157 @@ document.getElementById("perfil").innerHTML += `
 `;
 
 console.log("JMM_STUDIOS BETA CARGADA");
+document.getElementById("perfil").innerHTML += `
+
+<hr style="margin:40px;">
+
+<h2>📱 MIS REDES SOCIALES</h2>
+
+<br>
+
+<a href="https://www.tiktok.com/@11_joel_11?_r=1&_t=ZS-96y5bJt3TG9" target="_blank">
+<button style="
+background:#ff0050;
+color:white;
+padding:15px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+">
+🎵 TikTok
+</button>
+</a>
+
+<a href="https://www.instagram.com/joel0228000" target="_blank">
+<button style="
+background:#833AB4;
+color:white;
+padding:15px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+">
+📸 Instagram
+</button>
+</a>
+
+<hr style="margin:40px;">
+
+<h2>🎲 ELEGIR NOMBRE AL AZAR</h2>
+
+<p>Escribe nombres separados por comas</p>
+
+<input
+id="listaNombres"
+placeholder="Joel,Pedro,Ana,Luis"
+style="
+padding:10px;
+width:300px;
+border-radius:10px;
+">
+
+<button onclick="elegirNombre()">
+🎲 Elegir
+</button>
+
+<h2 id="nombreGanador">🤔</h2>
+
+<hr style="margin:40px;">
+
+<h2>🔑 CÓDIGOS SECRETOS</h2>
+
+<input
+id="codigoSecreto"
+placeholder="Escribe un código"
+style="
+padding:10px;
+border-radius:10px;
+">
+
+<button onclick="usarCodigo()">
+🚀 Activar
+</button>
+
+<h3 id="mensajeCodigo"></h3>
+
+`;
+
+function elegirNombre(){
+
+let texto =
+document.getElementById("listaNombres").value;
+
+if(texto.trim()==""){
+
+alert("Escribe nombres");
+
+return;
+
+}
+
+let nombres = texto.split(",");
+
+let ganador =
+nombres[Math.floor(Math.random()*nombres.length)];
+
+document.getElementById("nombreGanador").innerHTML =
+"🏆 " + ganador.trim();
+
+}
+
+function usarCodigo(){
+
+let codigo =
+document.getElementById("codigoSecreto").value;
+
+if(codigo==="132611"){
+
+document.getElementById("mensajeCodigo").innerHTML =
+"🚀 MODO PRO ACTIVADO";
+
+document.body.style.background =
+"linear-gradient(45deg,#ff00ff,#00ffff,#00ff00,#ffff00)";
+
+document.body.style.backgroundSize="400% 400%";
+
+document.body.style.animation=
+"fondo 3s linear infinite";
+
+let titulo=document.querySelector("h1");
+
+if(titulo){
+
+titulo.style.textShadow=
+"0 0 20px white,0 0 40px cyan";
+
+}
+
+for(let i=0;i<100;i++){
+
+let estrella=document.createElement("div");
+
+estrella.innerHTML="✨";
+
+estrella.style.position="fixed";
+
+estrella.style.left=Math.random()*100+"vw";
+
+estrella.style.top=Math.random()*100+"vh";
+
+estrella.style.fontSize="25px";
+
+estrella.style.pointerEvents="none";
+
+document.body.appendChild(estrella);
+
+}
+
+}else{
+
+document.getElementById("mensajeCodigo").innerHTML =
+"❌ Código incorrecto";
+
+}
+
+}
 </script>
