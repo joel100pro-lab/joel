@@ -510,5 +510,329 @@ function calcularPremio() {
   document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + opcionesPremios[indiceGanador] + "!";
 }
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 2: MENU CENTRAL Y RULETA (Pega justo arriba de </body>) -->
+<!-- ======================================================== -->
+
+<!-- SECTION 1: MENÚ PRINCIPAL INTERMEDIO (Oculto al inicio) -->
+<div id="menu-principal" class="menu-central">
+  <h1 class="titulo-marca">VIBLOX STUDIOS</h1>
+  <p class="subtitulo-marca">Centro de Entretenimiento y Diseños Exclusivos</p>
+
+  <div class="contenedor-botones-menu">
+    <!-- Botón para abrir la Ruleta -->
+    <button class="boton-menu-principal" onclick="abrirSeccion('seccion-ruleta')">
+      🎰 Probar Suerte (Ruleta)
+    </button>
+    
+    <!-- Botón de muestra para el futuro (Desactivado por ahora) -->
+    <button class="boton-menu-principal proximamente" disabled>
+      👕 Catálogo de Ropa (Próximamente)
+    </button>
+  </div>
+</div>
+
+
+<!-- SECTION 2: LA RULETA (Oculta al inicio) -->
+<div id="seccion-ruleta" class="pantalla-ruleta">
+  <h2 class="titulo-empresa-ruleta">VIBLOX STUDIOS</h2>
+  <p class="subtitulo-ruleta">¡Gira y gana premios exclusivos!</p>
+
+  <div class="contenedor-ruleta">
+    <div class="marcador-ruleta">⬇️</div>
+    <canvas id="ruletaCanvas" width="360" height="360"></canvas>
+    <button class="boton-girar" onclick="girarRuleta()">GIRAR</button>
+  </div>
+
+  <div id="mensaje-premio" class="premio-texto"></div>
+  
+  <!-- Botón para regresar al menú central -->
+  <button class="boton-volver" onclick="abrirSeccion('menu-principal')">⬅️ Volver al Menú</button>
+</div>
+
+
+<!-- 🎨 ESTILOS CSS PARA EL MENÚ Y LA RULETA 🎨 -->
+<style>
+/* Estilos del Menú Central */
+.menu-central {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.5s ease-out;
+}
+
+.titulo-marca {
+  font-size: 55px;
+  font-weight: bold;
+  letter-spacing: 6px;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+}
+
+.subtitulo-marca {
+  font-size: 18px;
+  opacity: 0.7;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.contenedor-botones-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.boton-menu-principal {
+  width: 100%;
+  max-width: 350px;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-menu-principal:hover:not(:disabled) {
+  background: white;
+  color: black;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px white;
+}
+
+.boton-menu-principal:disabled {
+  border-color: #444;
+  color: #555;
+  cursor: not-allowed;
+}
+
+/* Estilos de la sección Ruleta */
+.pantalla-ruleta {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 5;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: aparecerSuave 0.5s ease-out;
+}
+
+@keyframes aparecerSuave {
+  from { opacity: 0; transform: translate(-50%, -48%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.titulo-empresa-ruleta {
+  font-size: 38px;
+  letter-spacing: 3px;
+  margin-bottom: 5px;
+}
+
+.contenedor-ruleta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.marcador-ruleta {
+  font-size: 30px;
+  position: absolute;
+  top: -22px;
+  z-index: 10;
+}
+
+#ruletaCanvas {
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+  background: #0a0a0a;
+}
+
+.boton-girar {
+  margin-top: 20px;
+  padding: 12px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-girar:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px white;
+}
+
+.boton-girar:disabled {
+  background: #444;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.premio-texto {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  min-height: 25px;
+}
+
+.boton-volver {
+  margin-top: 30px;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.boton-volver:hover {
+  color: white;
+  border-color: white;
+}
+</style>
+
+
+<!-- 🧠 LÓGICA JAVASCRIPT REESTRUCTURADA 🧠 -->
+<script>
+// Lista de premios configurables
+const opcionesPremios = ["10 ROBUX 🪙", "CAMISETA VIP 👕", "SUERTE... ❌", "RANGO FAN ⭐", "50 ROBUX 🪙", "SHORT EXCL. 🩳", "SORPRESA ORO 🎁", "NADA... 🍃"];
+const coloresPremios = ["#111111", "#222222", "#333333", "#1a1a1a", "#2e2e2e", "#444444", "#0a0a0a", "#242424"]; // Tonos oscuros estéticos
+
+let canvas = null;
+let ctx = null;
+let centro = 0;
+let anguloActual = 0;
+let estaGirando = false;
+
+// Al dar clic en ENTRAR en la pantalla de inicio
+function entrar() {
+  document.querySelector('.contenedor').style.display = 'none';
+  abrirSeccion('menu-principal');
+}
+
+// Navegación limpia entre secciones
+function abrirSeccion(idSeccion) {
+  // Esconder el menú y la ruleta
+  document.getElementById('menu-principal').style.display = 'none';
+  document.getElementById('seccion-ruleta').style.display = 'none';
+  
+  // Mostrar la sección elegida
+  document.getElementById(idSeccion).style.display = 'block';
+  
+  // Si abrimos la ruleta, la dibujamos por primera vez
+  if (idSeccion === 'seccion-ruleta') {
+    setTimeout(inicializarRuleta, 50);
+  }
+}
+
+function inicializarRuleta() {
+  canvas = document.getElementById("ruletaCanvas");
+  ctx = canvas.getContext("2d");
+  centro = canvas.width / 2;
+  dibujarRuleta();
+}
+
+function dibujarRuleta() {
+  if (!ctx) return;
+  const numOpciones = opcionesPremios.length;
+  const arco = (2 * Math.PI) / numOpciones;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < numOpciones; i++) {
+    let anguloGajo = anguloActual + i * arco;
+    
+    ctx.fillStyle = coloresPremios[i % coloresPremios.length];
+    ctx.beginPath();
+    ctx.moveTo(centro, centro);
+    ctx.arc(centro, centro, centro - 5, anguloGajo, anguloGajo + arco);
+    ctx.lineTo(centro, centro);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 12px Arial";
+    ctx.translate(centro, centro);
+    ctx.rotate(anguloGajo + arco / 2);
+    ctx.textAlign = "right";
+    ctx.fillText(opcionesPremios[i], centro - 20, 4);
+    ctx.restore();
+  }
+
+  // Centro de la ruleta
+  ctx.beginPath();
+  ctx.arc(centro, centro, 20, 0, 2 * Math.PI);
+  ctx.fillStyle = "white";
+  ctx.fill();
+}
+
+function girarRuleta() {
+  if (estaGirando) return;
+  estaGirando = true;
+  document.querySelector(".boton-girar").disabled = true;
+  document.getElementById("mensaje-premio").innerText = "🎰 Girando...";
+
+  const girosBase = 6 + Math.random() * 4;
+  const anguloFinal = girosBase * 2 * Math.PI + Math.random() * 2 * Math.PI;
+  const tiempoTotal = 3500;
+  let tiempoInicio = null;
+
+  function animar(tiempoActual) {
+    if (!tiempoInicio) tiempoInicio = tiempoActual;
+    let progreso = tiempoActual - tiempoInicio;
+    
+    if (progreso < tiempoTotal) {
+      let t = progreso / tiempoTotal;
+      let easeOut = 1 - Math.pow(1 - t, 3);
+      anguloActual = easeOut * anguloFinal;
+      dibujarRuleta();
+      requestAnimationFrame(animar);
+    } else {
+      anguloActual = anguloFinal % (2 * Math.PI);
+      dibujarRuleta();
+      calcularPremio();
+      estaGirando = false;
+      document.querySelector(".boton-girar").disabled = false;
+    }
+  }
+  requestAnimationFrame(animar);
+}
+
+function calcularPremio() {
+  const numOpciones = opcionesPremios.length;
+  const arco = (2 * Math.PI) / numOpciones;
+  let anguloMarcador = (3 * Math.PI) / 2 - anguloActual;
+  while (anguloMarcador < 0) anguloMarcador += 2 * Math.PI;
+  
+  let indiceGanador = Math.floor(anguloMarcador / arco) % numOpciones;
+  document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + opcionesPremios[indiceGanador] + "!";
+}
+</script>
 </body>
 </html>
