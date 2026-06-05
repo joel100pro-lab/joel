@@ -3,1123 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>JMM_STUDIOS BETA</title>
+<title>VibLOX</title>
 
 <style>
 
-*{
+body{
 margin:0;
 padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:linear-gradient(-45deg,#0f172a,#1e293b,#334155,#475569);
-background-size:400% 400%;
-animation:fondo 15s ease infinite;
+background:black;
 color:white;
+font-family:Arial,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 text-align:center;
-overflow-x:hidden;
+overflow:hidden;
+position: relative; /* Necesario para que las estrellas no se muevan de su lugar */
 }
 
-@keyframes fondo{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+/* Estilo para las estrellas de fondo */
+.estrella {
+position: absolute;
+background-color: white;
+border-radius: 50%;
+pointer-events: none; /* Hace que las estrellas no interfieran con los clics */
+z-index: 0; /* Las mantiene al fondo */
 }
 
-header{
-padding:40px;
+.contenedor{
+width:90%;
+max-width:900px;
+position: relative;
+z-index: 1; /* Pone el contenido por encima de las estrellas */
 }
 
-h1{
-font-size:4rem;
-animation:zoom 2s infinite;
-}
-
-@keyframes zoom{
-50%{
-transform:scale(1.05);
-}
-}
-
-.beta{
-background:gold;
-color:black;
-padding:15px;
-margin:20px;
-border-radius:15px;
+.logo{
+font-size:90px;
 font-weight:bold;
-font-size:22px;
+letter-spacing:8px;
+color:white;
+text-shadow:0 0 15px white;
+animation:brillo 2s infinite;
 }
 
-#verificacion{
+@keyframes brillo{
+50%{
+text-shadow:
+0 0 10px white,
+0 0 20px white,
+0 0 40px white;
+}
+}
+
+.version{
+font-size:22px;
+margin-top:10px;
+opacity:.8;
+}
+
+.creador{
+font-size:18px;
+margin-top:10px;
+opacity:.8;
+}
+
+.redes{
+margin-top:40px;
+}
+
+.boton-red{
+padding:15px 25px;
+margin:10px;
+border:none;
+border-radius:15px;
 background:white;
 color:black;
-max-width:350px;
-margin:auto;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 20px rgba(0,0,0,.5);
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:10px;
+font-size:18px;
+font-weight:bold;
 cursor:pointer;
-font-size:16px;
-margin:5px;
+transition:.3s;
 }
 
-.menu{
-display:none;
-margin-top:20px;
+.boton-red:hover{
+transform:scale(1.1);
 }
 
-.menu button{
-background:#00c853;
-color:white;
+.boton-entrar{
+margin-top:50px;
+padding:20px 60px;
+font-size:28px;
+font-weight:bold;
+border:none;
+border-radius:20px;
+background:white;
+color:black;
+cursor:pointer;
+transition:.3s;
 }
 
-.seccion{
-display:none;
-padding:30px;
+.boton-entrar:hover{
+transform:scale(1.1);
+box-shadow:0 0 20px white;
 }
 
-footer{
-margin-top:100px;
-padding:30px;
-background:rgba(0,0,0,.3);
-}
-
-audio{
-margin-top:15px;
+a{
+text-decoration:none;
 }
 
 </style>
-</head>
 
+</head>
 <body>
 
-<header>
+<div class="contenedor">
 
-<h1>🚀 JMM_STUDIOS 🚀</h1>
-
-<p>Bienvenido a la versión beta</p>
-
-<div class="beta">
-🚧 ESTA ES UNA VERSIÓN BETA 🚧
-<br>
-Creada por JMM_STUDIOS
+<div class="logo">
+VibLOX
 </div>
 
-<audio id="musica" controls loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
-
-</header>
-
-<div id="verificacion">
-
-<h2>Verificación</h2>
-
-<br>
-
-<input type="checkbox" id="robot">
-
-<label>No soy un robot 🤖</label>
-
-<br><br>
-
-<button onclick="entrar()">Entrar</button>
-
+<div class="version">
+🚀 Versión 3.0
 </div>
 
-<div class="menu" id="menu">
-
-<h2>MENÚ PRINCIPAL</h2>
-
-<button onclick="mostrar('inicio')">🏠 Inicio</button>
-
-<button onclick="mostrar('juegos')">🎮 Juegos</button>
-
-<button onclick="mostrar('galeria')">📸 Galería</button>
-
-<button onclick="mostrar('ruleta')">🎰 Ruleta</button>
-
-<button onclick="mostrar('perfil')">🏢 JMM_STUDIOS</button>
-
+<div class="creador">
+Creada por el equipo VibLOXstudios
 </div>
 
-<div id="inicio" class="seccion">
-
-<h2>🎉 Bienvenido 🎉</h2>
-
-<p>Gracias por visitar la beta.</p>
-
-<h1 id="contador">0</h1>
-
-</div>
-
-<div id="juegos" class="seccion">
-</div>
-
-<div id="galeria" class="seccion">
-</div>
-
-<div id="ruleta" class="seccion">
-</div>
-
-<div id="perfil" class="seccion">
-
-<h2>🏢 JMM_STUDIOS</h2>
-
-<p>Versión Beta 1.0</p>
-
-<p>Más funciones próximamente.</p>
-
-</div>
-
-<footer>
-
-<h2>⭐ JMM_STUDIOS ⭐</h2>
-
-<p>Versión Beta</p>
-
-</footer>
-
-<script>
-
-function entrar(){
-
-if(document.getElementById("robot").checked){
-
-document.getElementById("verificacion").style.display="none";
-
-document.getElementById("menu").style.display="block";
-
-mostrar("inicio");
-
-let musica=document.getElementById("musica");
-
-musica.volume=0.2;
-
-musica.play().catch(()=>{});
-
-}else{
-
-alert("Marca la casilla primero.");
-
-}
-
-}
-
-function mostrar(id){
-
-let secciones=document.querySelectorAll(".seccion");
-
-secciones.forEach(sec=>sec.style.display="none");
-
-document.getElementById(id).style.display="block";
-
-}
-
-let numero=0;
-
-setInterval(()=>{
-
-if(numero<50000){
-
-numero+=50;
-
-document.getElementById("contador").innerText=numero;
-
-}
-
-},10);
-
-document.getElementById("galeria").innerHTML = `
-
-<h2>📸 GALERÍA ÉPICA 📸</h2>
-
-<p>Versión Beta de JMM_STUDIOS</p>
-
-<br>
-
-<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
-
-<img src="https://picsum.photos/300?1" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?2" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?3" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?4" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?5" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?6" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?7" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?8" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?9" style="width:300px;border-radius:15px;">
-<img src="https://picsum.photos/300?10" style="width:300px;border-radius:15px;">
-
-</div>
-
-`;
-
-document.getElementById("juegos").innerHTML = `
-
-<h2>🎮 CENTRO DE JUEGOS 🎮</h2>
-
-<br>
-
-<div style="background:rgba(255,255,255,.1);padding:20px;border-radius:20px;max-width:700px;margin:auto;">
-
-<h3>⚡ Juego de Clics ⚡</h3>
-
-<p>Haz clic para ganar puntos.</p>
-
-<h1 id="puntos">0</h1>
-
-<button onclick="sumarPuntos()">+1 Punto</button>
-
-</div>
-
-<br>
-
-<div style="background:rgba(255,255,255,.1);padding:20px;border-radius:20px;max-width:700px;margin:auto;">
-
-<h3>🎲 Número Secreto 🎲</h3>
-
-<input id="numeroUsuario" type="number">
-
-<button onclick="adivinarNumero()">Adivinar</button>
-
-<p id="resultadoNumero"></p>
-
-</div>
-
-`;
-
-let puntos = 0;
-
-function sumarPuntos(){
-
-puntos++;
-
-document.getElementById("puntos").innerText = puntos;
-
-}
-
-let numeroSecreto = Math.floor(Math.random()*10)+1;
-
-function adivinarNumero(){
-
-let n = parseInt(document.getElementById("numeroUsuario").value);
-
-if(n===numeroSecreto){
-
-document.getElementById("resultadoNumero").innerText =
-"🎉 ¡Correcto!";
-
-numeroSecreto=Math.floor(Math.random()*10)+1;
-
-}else{
-
-document.getElementById("resultadoNumero").innerText =
-"❌ Intenta otra vez";
-
-}
-
-}
-document.getElementById("ruleta").innerHTML = `
-
-<h2>🎰 RULETA PERSONALIZABLE 🎰</h2>
-
-<p>Escribe premios separados por comas</p>
-
-<input id="opcionesRuleta"
-placeholder="Pizza,Tacos,Hamburguesa"
-style="padding:10px;width:300px;">
-
-<br><br>
-
-<button onclick="girarRuleta()">🎲 GIRAR</button>
-
-<h1 id="resultadoRuleta">🎰</h1>
-
-<hr style="margin:40px;">
-
-<h2>✊ PIEDRA PAPEL O TIJERA ✋</h2>
-
-<button onclick="ppt('Piedra')">🪨 Piedra</button>
-
-<button onclick="ppt('Papel')">📄 Papel</button>
-
-<button onclick="ppt('Tijera')">✂️ Tijera</button>
-
-<h3 id="resultadoPPT"></h3>
-
-<hr style="margin:40px;">
-
-<h2>🏆 SISTEMA DE NIVELES 🏆</h2>
-
-<h1 id="nivel">1</h1>
-
-<p>Gana puntos en los juegos para subir.</p>
-
-`;
-
-function girarRuleta(){
-
-let texto =
-document.getElementById("opcionesRuleta").value;
-
-if(texto.trim()==""){
-
-alert("Escribe al menos un premio");
-
-return;
-
-}
-
-let premios = texto.split(",");
-
-let ganador =
-premios[Math.floor(Math.random()*premios.length)];
-
-document.getElementById("resultadoRuleta").innerText =
-"🏆 " + ganador.trim();
-
-}
-
-function ppt(usuario){
-
-let opciones=["Piedra","Papel","Tijera"];
-
-let cpu =
-opciones[Math.floor(Math.random()*3)];
-
-let mensaje="";
-
-if(usuario===cpu){
-
-mensaje="🤝 Empate";
-
-}else if(
-(usuario==="Piedra" && cpu==="Tijera") ||
-(usuario==="Papel" && cpu==="Piedra") ||
-(usuario==="Tijera" && cpu==="Papel")
-){
-
-mensaje="🎉 Ganaste";
-
-puntos+=5;
-
-}else{
-
-mensaje="😢 Perdiste";
-
-}
-
-document.getElementById("resultadoPPT").innerText =
-"CPU: " + cpu + " | " + mensaje;
-
-actualizarNivel();
-
-}
-
-function actualizarNivel(){
-
-let nivel =
-Math.floor((puntos/20))+1;
-
-let etiqueta =
-document.getElementById("nivel");
-
-if(etiqueta){
-
-etiqueta.innerText=nivel;
-
-}
-
-}
-document.getElementById("inicio").innerHTML += `
-
-<hr style="margin:40px;">
-
-<h2>⭐ EXPERIENCIA ⭐</h2>
-
-<div style="
-width:80%;
-max-width:700px;
-height:40px;
-background:#222;
-margin:auto;
-border-radius:20px;
-overflow:hidden;
-">
-
-<div id="barraXP" style="
-height:100%;
-width:0%;
-background:lime;
-transition:.5s;
-">
-</div>
-
-</div>
-
-<br>
-
-<h2>🏆 LOGROS 🏆</h2>
-
-<div id="logros">
-
-❌ 100 puntos<br>
-❌ 250 puntos<br>
-❌ 500 puntos<br>
-
-</div>
-
-<br>
-
-<button onclick="cajaSorpresa()">
-🎁 CAJA SORPRESA
-</button>
-
-<h2 id="premioSorpresa"></h2>
-
-`;
-
-function actualizarNivel(){
-
-let nivel=Math.floor((puntos/20))+1;
-
-let etiqueta=document.getElementById("nivel");
-
-if(etiqueta){
-etiqueta.innerText=nivel;
-}
-
-let porcentaje=(puntos%20)*5;
-
-let barra=document.getElementById("barraXP");
-
-if(barra){
-barra.style.width=porcentaje+"%";
-}
-
-let logros="";
-
-logros += puntos>=100 ? "✅ 100 puntos<br>" : "❌ 100 puntos<br>";
-
-logros += puntos>=250 ? "✅ 250 puntos<br>" : "❌ 250 puntos<br>";
-
-logros += puntos>=500 ? "✅ 500 puntos<br>" : "❌ 500 puntos<br>";
-
-let caja=document.getElementById("logros");
-
-if(caja){
-caja.innerHTML=logros;
-}
-
-}
-
-function cajaSorpresa(){
-
-let premios=[
-
-"🍕 Pizza",
-"🚀 Cohete",
-"🏆 Trofeo",
-"🎮 Videojuego",
-"⭐ Estrella",
-"💎 Diamante",
-"🎁 Caja Legendaria",
-"👑 Corona"
-
-];
-
-let premio=
-premios[Math.floor(Math.random()*premios.length)];
-
-document.getElementById("premioSorpresa").innerText=
-premio;
-
-}
-
-setInterval(()=>{
-
-let estrellas=document.createElement("div");
-
-estrellas.innerHTML="⭐";
-
-estrellas.style.position="fixed";
-
-estrellas.style.left=Math.random()*100+"vw";
-
-estrellas.style.top="-20px";
-
-estrellas.style.fontSize="20px";
-
-estrellas.style.pointerEvents="none";
-
-document.body.appendChild(estrellas);
-
-let pos=0;
-
-let anim=setInterval(()=>{
-
-pos+=4;
-
-estrellas.style.top=pos+"px";
-
-if(pos>window.innerHeight){
-
-clearInterval(anim);
-
-estrellas.remove();
-
-}
-
-},20);
-
-},800);
-document.body.insertAdjacentHTML("afterbegin", `
-
-<button id="modoOscuroBtn"
-style="
-position:fixed;
-top:10px;
-right:10px;
-z-index:999;
-padding:10px;
-border:none;
-border-radius:10px;
-background:black;
-color:white;
-cursor:pointer;
-">
-🌙 Modo Oscuro
-</button>
-
-`);
-
-let oscuro=false;
-
-document.getElementById("modoOscuroBtn")
-.addEventListener("click",()=>{
-
-oscuro=!oscuro;
-
-if(oscuro){
-
-document.body.style.background="#000";
-document.body.style.color="#fff";
-
-}else{
-
-document.body.style.background="";
-document.body.style.color="";
-
-}
-
-});
-
-document.getElementById("perfil").innerHTML += `
-
-<hr style="margin:40px;">
-
-<h2>📊 ESTADÍSTICAS</h2>
-
-<p id="statsPuntos">Puntos: 0</p>
-
-<p id="statsNivel">Nivel: 1</p>
-
-<br>
-
-<button onclick="mostrarConfeti()">
-🎆 CELEBRAR
-</button>
-
-<br><br>
-
-<h2>🚧 BETA OFICIAL 🚧</h2>
-
-<p>
-Esta página está en desarrollo.
-Próximamente habrá más funciones.
-</p>
-
-`;
-
-setInterval(()=>{
-
-let sp=document.getElementById("statsPuntos");
-let sn=document.getElementById("statsNivel");
-
-if(sp) sp.innerText="Puntos: "+puntos;
-
-if(sn){
-let nivel=Math.floor((puntos/20))+1;
-sn.innerText="Nivel: "+nivel;
-}
-
-},500);
-
-function mostrarConfeti(){
-
-for(let i=0;i<80;i++){
-
-let conf=document.createElement("div");
-
-conf.innerHTML="🎉";
-
-conf.style.position="fixed";
-
-conf.style.left=Math.random()*100+"vw";
-
-conf.style.top="-50px";
-
-conf.style.fontSize=(20+Math.random()*25)+"px";
-
-conf.style.pointerEvents="none";
-
-document.body.appendChild(conf);
-
-let pos=0;
-
-let velocidad=2+Math.random()*6;
-
-let anim=setInterval(()=>{
-
-pos+=velocidad;
-
-conf.style.top=pos+"px";
-
-if(pos>window.innerHeight){
-
-clearInterval(anim);
-
-conf.remove();
-
-}
-
-},20);
-
-}
-
-}
-
-document.getElementById("perfil").innerHTML += `
-
-<br><br>
-
-<h1>🏢 JMM_STUDIOS 🏢</h1>
-
-<p>Versión Beta 1.0</p>
-
-<p>Gracias por probar nuestro proyecto.</p>
-
-<h2>⭐ TODOS LOS DERECHOS RESERVADOS ⭐</h2>
-
-`;
-
-console.log("JMM_STUDIOS BETA CARGADA");
-document.getElementById("perfil").innerHTML += `
-
-<hr style="margin:40px;">
-
-<h2>📱 MIS REDES SOCIALES</h2>
-
-<br>
+<div class="redes">
 
 <a href="https://www.tiktok.com/@11_joel_11?_r=1&_t=ZS-96y5bJt3TG9" target="_blank">
-<button style="
-background:#ff0050;
-color:white;
-padding:15px;
-border:none;
-border-radius:15px;
-cursor:pointer;
-">
+<button class="boton-red">
 🎵 TikTok
 </button>
 </a>
 
 <a href="https://www.instagram.com/joel0228000" target="_blank">
-<button style="
-background:#833AB4;
-color:white;
-padding:15px;
-border:none;
-border-radius:15px;
-cursor:pointer;
-">
+<button class="boton-red">
 📸 Instagram
 </button>
 </a>
 
-<hr style="margin:40px;">
+</div>
 
-<h2>🎲 ELEGIR NOMBRE AL AZAR</h2>
-
-<p>Escribe nombres separados por comas</p>
-
-<input
-id="listaNombres"
-placeholder="Joel,Pedro,Ana,Luis"
-style="
-padding:10px;
-width:300px;
-border-radius:10px;
-">
-
-<button onclick="elegirNombre()">
-🎲 Elegir
+<button class="boton-entrar" onclick="entrar()">
+ENTRAR
 </button>
 
-<h2 id="nombreGanador">🤔</h2>
+</div>
 
-<hr style="margin:40px;">
+<script>
 
-<h2>🔑 CÓDIGOS SECRETOS</h2>
-
-<input
-id="codigoSecreto"
-placeholder="Escribe un código"
-style="
-padding:10px;
-border-radius:10px;
-">
-
-<button onclick="usarCodigo()">
-🚀 Activar
-</button>
-
-<h3 id="mensajeCodigo"></h3>
-
-`;
-
-function elegirNombre(){
-
-let texto =
-document.getElementById("listaNombres").value;
-
-if(texto.trim()==""){
-
-alert("Escribe nombres");
-
-return;
-
+function entrar(){
+alert("🚀 Bienvenido a VibLOX");
 }
 
-let nombres = texto.split(",");
+// --- GENERADOR DE ESTRELLAS ---
+function crearEstrellas() {
+const numeroEstrellas = 100; // Puedes subir o bajar este número si quieres más o menos estrellas
 
-let ganador =
-nombres[Math.floor(Math.random()*nombres.length)];
+for (let i = 0; i < numeroEstrellas; i++) {
+const estrella = document.createElement('div');
+estrella.classList.add('estrella');
 
-document.getElementById("nombreGanador").innerHTML =
-"🏆 " + ganador.trim();
+// Tamaños pequeños aleatorios (entre 1px y 3px) para que se vean finas
+const tamano = Math.random() * 2 + 1;
+estrella.style.width = tamano + 'px';
+estrella.style.height = tamano + 'px';
 
-}
+// Posiciones aleatorias en toda la pantalla
+estrella.style.left = Math.random() * 100 + 'vw';
+estrella.style.top = Math.random() * 100 + 'vh';
 
-function usarCodigo(){
-
-let codigo =
-document.getElementById("codigoSecreto").value;
-
-if(codigo==="132611"){
-
-document.getElementById("mensajeCodigo").innerHTML =
-"🚀 MODO PRO ACTIVADO";
-
-document.body.style.background =
-"linear-gradient(45deg,#ff00ff,#00ffff,#00ff00,#ffff00)";
-
-document.body.style.backgroundSize="400% 400%";
-
-document.body.style.animation=
-"fondo 3s linear infinite";
-
-let titulo=document.querySelector("h1");
-
-if(titulo){
-
-titulo.style.textShadow=
-"0 0 20px white,0 0 40px cyan";
-
-}
-
-for(let i=0;i<100;i++){
-
-let estrella=document.createElement("div");
-
-estrella.innerHTML="✨";
-
-estrella.style.position="fixed";
-
-estrella.style.left=Math.random()*100+"vw";
-
-estrella.style.top=Math.random()*100+"vh";
-
-estrella.style.fontSize="25px";
-
-estrella.style.pointerEvents="none";
+// Opacidad "en bajito" (entre 0.1 y 0.5) para que no cansen la vista
+estrella.style.opacity = Math.random() * 0.4 + 0.1;
 
 document.body.appendChild(estrella);
-
+}
 }
 
-}else{
+// Ejecutar la función al cargar la página
+crearEstrellas();
 
-document.getElementById("mensajeCodigo").innerHTML =
-"❌ Código incorrecto";
-
-}
-
-}
-document.getElementById("juegos").innerHTML += `
-
-<hr style="margin:40px;">
-
-<h2>🏃 SALTA LOS OBSTÁCULOS 🏃</h2>
-
-<p>📱 Toca la pantalla en celular</p>
-<p>⌨️ Espacio o clic izquierdo en PC</p>
-
-<div id="game" style="
-position:relative;
-width:100%;
-max-width:800px;
-height:250px;
-margin:auto;
-background:#222;
-overflow:hidden;
-border-radius:20px;
-">
-
-<div id="player" style="
-position:absolute;
-bottom:0;
-left:50px;
-width:40px;
-height:40px;
-background:cyan;
-border-radius:10px;
-">
-</div>
-
-<div id="obstacle" style="
-position:absolute;
-bottom:0;
-right:-50px;
-width:40px;
-height:40px;
-background:red;
-">
-</div>
-
-</div>
-
-<h2>Puntos: <span id="gameScore">0</span></h2>
-
-<button onclick="iniciarJuego()">
-🎮 Iniciar
-</button>
-
-`;
-
-let jugando=false;
-let saltando=false;
-let scoreGame=0;
-
-function iniciarJuego(){
-
-if(jugando)return;
-
-jugando=true;
-
-scoreGame=0;
-
-let player=document.getElementById("player");
-let obstacle=document.getElementById("obstacle");
-
-obstacle.style.right="-50px";
-
-let pos=-50;
-
-let loop=setInterval(()=>{
-
-if(!jugando){
-
-clearInterval(loop);
-
-return;
-
-}
-
-pos+=6;
-
-obstacle.style.right=pos+"px";
-
-let jugadorY=parseInt(player.style.bottom)||0;
-
-let obsX=800-pos;
-
-if(obsX<90 && obsX>20 && jugadorY<35){
-
-alert("💀 GAME OVER\nPuntos: "+scoreGame);
-
-jugando=false;
-
-}
-
-if(pos>900){
-
-pos=-50;
-
-scoreGame++;
-
-document.getElementById("gameScore").innerText=
-scoreGame;
-
-}
-
-},20);
-
-}
-
-function saltar(){
-
-if(saltando)return;
-
-saltando=true;
-
-let player=document.getElementById("player");
-
-let altura=0;
-
-let subir=setInterval(()=>{
-
-altura+=8;
-
-player.style.bottom=altura+"px";
-
-if(altura>=100){
-
-clearInterval(subir);
-
-let bajar=setInterval(()=>{
-
-altura-=8;
-
-player.style.bottom=altura+"px";
-
-if(altura<=0){
-
-clearInterval(bajar);
-
-saltando=false;
-
-}
-
-},20);
-
-}
-
-},20);
-
-}
-
-document.addEventListener("keydown",(e)=>{
-
-if(e.code==="Space"){
-
-saltar();
-
-}
-
-});
-
-document.addEventListener("click",()=>{
-
-saltar();
-
-});
-
-document.addEventListener("touchstart",()=>{
-
-saltar();
-
-});
-
-document.getElementById("perfil").innerHTML += `
-
-<hr style="margin:40px;">
-
-<h2>⭐ SEGUIR PÁGINA ⭐</h2>
-
-<button onclick="seguirPagina()" id="btnSeguir">
-➕ Seguir
-</button>
-
-<h3>
-Seguidores:
-<span id="seguidores">0</span>
-</h3>
-
-<h2>🚀 VERSIÓN 2.0 🚀</h2>
-
-<p>
-Ahora incluye juego de obstáculos,
-más animaciones y nuevas funciones.
-</p>
-
-`;
-
-let seguidores =
-localStorage.getItem("seguidoresJMM") || 0;
-
-setTimeout(()=>{
-
-let s=document.getElementById("seguidores");
-
-if(s){
-
-s.innerText=seguidores;
-
-}
-
-},100);
-
-function seguirPagina(){
-
-if(localStorage.getItem("yaSigueJMM")){
-
-alert("✅ Ya sigues la página");
-
-return;
-
-}
-
-seguidores++;
-
-localStorage.setItem(
-"seguidoresJMM",
-seguidores
-);
-
-localStorage.setItem(
-"yaSigueJMM",
-"si"
-);
-
-document.getElementById("seguidores").innerText=
-seguidores;
-
-document.getElementById("btnSeguir").innerText=
-"✅ Siguiendo";
-
-}
 </script>
+
+</body>
+</html>
