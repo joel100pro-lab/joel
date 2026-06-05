@@ -879,4 +879,247 @@ document.getElementById("mensajeCodigo").innerHTML =
 }
 
 }
+document.getElementById("juegos").innerHTML += `
+
+<hr style="margin:40px;">
+
+<h2>🏃 SALTA LOS OBSTÁCULOS 🏃</h2>
+
+<p>📱 Toca la pantalla en celular</p>
+<p>⌨️ Espacio o clic izquierdo en PC</p>
+
+<div id="game" style="
+position:relative;
+width:100%;
+max-width:800px;
+height:250px;
+margin:auto;
+background:#222;
+overflow:hidden;
+border-radius:20px;
+">
+
+<div id="player" style="
+position:absolute;
+bottom:0;
+left:50px;
+width:40px;
+height:40px;
+background:cyan;
+border-radius:10px;
+">
+</div>
+
+<div id="obstacle" style="
+position:absolute;
+bottom:0;
+right:-50px;
+width:40px;
+height:40px;
+background:red;
+">
+</div>
+
+</div>
+
+<h2>Puntos: <span id="gameScore">0</span></h2>
+
+<button onclick="iniciarJuego()">
+🎮 Iniciar
+</button>
+
+`;
+
+let jugando=false;
+let saltando=false;
+let scoreGame=0;
+
+function iniciarJuego(){
+
+if(jugando)return;
+
+jugando=true;
+
+scoreGame=0;
+
+let player=document.getElementById("player");
+let obstacle=document.getElementById("obstacle");
+
+obstacle.style.right="-50px";
+
+let pos=-50;
+
+let loop=setInterval(()=>{
+
+if(!jugando){
+
+clearInterval(loop);
+
+return;
+
+}
+
+pos+=6;
+
+obstacle.style.right=pos+"px";
+
+let jugadorY=parseInt(player.style.bottom)||0;
+
+let obsX=800-pos;
+
+if(obsX<90 && obsX>20 && jugadorY<35){
+
+alert("💀 GAME OVER\nPuntos: "+scoreGame);
+
+jugando=false;
+
+}
+
+if(pos>900){
+
+pos=-50;
+
+scoreGame++;
+
+document.getElementById("gameScore").innerText=
+scoreGame;
+
+}
+
+},20);
+
+}
+
+function saltar(){
+
+if(saltando)return;
+
+saltando=true;
+
+let player=document.getElementById("player");
+
+let altura=0;
+
+let subir=setInterval(()=>{
+
+altura+=8;
+
+player.style.bottom=altura+"px";
+
+if(altura>=100){
+
+clearInterval(subir);
+
+let bajar=setInterval(()=>{
+
+altura-=8;
+
+player.style.bottom=altura+"px";
+
+if(altura<=0){
+
+clearInterval(bajar);
+
+saltando=false;
+
+}
+
+},20);
+
+}
+
+},20);
+
+}
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.code==="Space"){
+
+saltar();
+
+}
+
+});
+
+document.addEventListener("click",()=>{
+
+saltar();
+
+});
+
+document.addEventListener("touchstart",()=>{
+
+saltar();
+
+});
+
+document.getElementById("perfil").innerHTML += `
+
+<hr style="margin:40px;">
+
+<h2>⭐ SEGUIR PÁGINA ⭐</h2>
+
+<button onclick="seguirPagina()" id="btnSeguir">
+➕ Seguir
+</button>
+
+<h3>
+Seguidores:
+<span id="seguidores">0</span>
+</h3>
+
+<h2>🚀 VERSIÓN 2.0 🚀</h2>
+
+<p>
+Ahora incluye juego de obstáculos,
+más animaciones y nuevas funciones.
+</p>
+
+`;
+
+let seguidores =
+localStorage.getItem("seguidoresJMM") || 0;
+
+setTimeout(()=>{
+
+let s=document.getElementById("seguidores");
+
+if(s){
+
+s.innerText=seguidores;
+
+}
+
+},100);
+
+function seguirPagina(){
+
+if(localStorage.getItem("yaSigueJMM")){
+
+alert("✅ Ya sigues la página");
+
+return;
+
+}
+
+seguidores++;
+
+localStorage.setItem(
+"seguidoresJMM",
+seguidores
+);
+
+localStorage.setItem(
+"yaSigueJMM",
+"si"
+);
+
+document.getElementById("seguidores").innerText=
+seguidores;
+
+document.getElementById("btnSeguir").innerText=
+"✅ Siguiendo";
+
+}
 </script>
