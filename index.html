@@ -187,5 +187,249 @@ crearEstrellas();
 
 </script>
 
+<div id="seccion-ruleta" class="pantalla-negra">
+  <h1 class="titulo-empresa">VIBLOX STUDIOS</h1>
+  <p class="subtitulo-ruleta">¡Prueba tu suerte en nuestra ruleta aleatoria!</p>
+
+  <div class="contenedor-ruleta">
+    <div class="marcador-ruleta">⬇️</div>
+    <canvas id="ruletaCanvas" width="400" height="400"></canvas>
+    <button class="boton-girar" onclick="girarRuleta()">GIRAR</button>
+  </div>
+
+  <div id="mensaje-premio" class="premio-texto"></div>
+</div>
+
+<style>
+.pantalla-negra {
+  display: none; /* Se activa al presionar ENTRAR */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  color: white;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Forzar que se oculte al cargar la página */
+body #seccion-ruleta {
+  display: none;
+}
+
+.titulo-empresa {
+  font-size: 50px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  margin: 0 0 5px 0;
+}
+
+.subtitulo-ruleta {
+  font-size: 18px;
+  opacity: 0.7;
+  margin: 0 0 30px 0;
+}
+
+.contenedor-ruleta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marcador-ruleta {
+  font-size: 35px;
+  position: absolute;
+  top: -25px;
+  z-index: 12;
+  animation: rebote 1s infinite alternate;
+}
+
+@keyframes rebote {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+
+#ruletaCanvas {
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  background: #111;
+}
+
+.boton-girar {
+  margin-top: 25px;
+  padding: 15px 50px;
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+  background: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.boton-girar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px white;
+}
+
+.boton-girar:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.premio-texto {
+  margin-top: 25px;
+  font-size: 24px;
+  font-weight: bold;
+  min-height: 35px;
+  text-shadow: 0 0 10px white;
+  text-align: center;
+}
+</style>
+
+<script>
+// 📝 AQUÍ PUEDES PONER LOS NOMBRES QUE TU QUIERAS DE PREMIOS
+const opcionesPremios = [
+  "10 ROBUX 🪙", 
+  "CAMISETA VIP 👕", 
+  "SUERTE LA PRÓXIMA ❌", 
+  "RANGO FAN ⭐", 
+  "50 ROBUX 🪙", 
+  "SHORT EXCLUSIVO 🩳", 
+  "SORPRESA ORO 🎁",
+  "NADA POR AQUÍ 🍃"
+];
+
+// Colores bonitos y modernos para los gajos de la ruleta
+const coloresPremios = ["#ff3366", "#33ccff", "#33ff99", "#ffcc00", "#9933ff", "#ff6600", "#ff33cc", "#444444"];
+
+let canvas = document.getElementById("ruletaCanvas");
+let ctx = canvas.getContext("2d");
+let centro = canvas.width / 2;
+let anguloActual = 0;
+let estaGirando = false;
+
+// Función para dibujar la ruleta con sus textos
+function dibujarRuleta() {
+  const numOpciones = opcionesPremios.length;
+  const arco = (2 * Math.PI) / numOpciones;
+
+  for (let i = 0; i < numOpciones; i++) {
+    let anguloGajo = anguloActual + i * arco;
+    
+    // Dibujar el gajo de color
+    ctx.fillStyle = coloresPremios[i % coloresPremios.length];
+    ctx.beginPath();
+    ctx.moveTo(centro, centro);
+    ctx.arc(centro, centro, centro - 10, anguloGajo, anguloGajo + arco);
+    ctx.lineTo(centro, centro);
+    ctx.fill();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Dibujar el texto del premio dentro del gajo
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 13px Arial";
+    ctx.shadowBlur = 4;
+    ctx.shadowColor = "black";
+    ctx.translate(centro, centro);
+    ctx.rotate(anguloGajo + arco / 2);
+    ctx.textAlign = "right";
+    ctx.fillText(opcionesPremios[i], centro - 25, 5);
+    ctx.restore();
+  }
+
+  // Círculo central estético
+  ctx.beginPath();
+  ctx.arc(centro, centro, 25, 0, 2 * Math.PI);
+  ctx.fillStyle = "white";
+  ctx.fill();
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+}
+
+// Modificación de tu función "entrar" original para activar todo
+function entrar() {
+  // Escondemos la pantalla de inicio
+  document.querySelector('.contenedor').style.display = 'none';
+  
+  // Mostramos la ruleta con su diseño negro
+  let ruletaSec = document.getElementById('seccion-ruleta');
+  ruletaSec.style.display = 'flex';
+  
+  // Inicializamos el dibujo de la ruleta
+  dibujarRuleta();
+}
+
+// Función 100% al azar para girar
+function girarRuleta() {
+  if (estaGirando) return;
+  estaGirando = true;
+  document.querySelector(".boton-girar").disabled = true;
+  document.getElementById("mensaje-premio").innerText = "🎰 Girando la suerte...";
+
+  const girosBase = 5 + Math.random() * 5; // Entre 5 y 10 vueltas completas
+  const anguloFinal = girosBase * 2 * Math.PI + Math.random() * 2 * Math.PI;
+  const tiempoTotal = 4000; // 4 segundos de giro fluido
+  let tiempoInicio = null;
+
+  function animarGiro(tiempoActual) {
+    if (!tiempoInicio) tiempoInicio = tiempoActual;
+    let progreso = tiempoActual - tiempoInicio;
+    
+    if (progreso < tiempoTotal) {
+      // Efecto de frenado suave (Ease-out)
+      let t = progreso / tiempoTotal;
+      let easeOut = 1 - Math.pow(1 - t, 3);
+      anguloActual = easeOut * anguloFinal;
+      
+      dibujarRuleta();
+      requestAnimationFrame(animarGiro);
+    } else {
+      // Se detiene el giro por completo
+      anguloActual = anguloFinal % (2 * Math.PI);
+      dibujarRuleta();
+      calcularPremio();
+      estaGirando = false;
+      document.querySelector(".boton-girar").disabled = false;
+    }
+  }
+  requestAnimationFrame(animarGiro);
+}
+
+// Calcular qué premio tocó según la posición del marcador de arriba
+function calcularPremio() {
+  const numOpciones = opcionesPremios.length;
+  const arco = (2 * Math.PI) / numOpciones;
+  
+  // Ajustamos el ángulo porque el marcador está arriba (-90 grados en radianes)
+  let anguloMarcador = (3 * Math.PI) / 2 - anguloActual;
+  while (anguloMarcador < 0) anguloMarcador += 2 * Math.PI;
+  
+  let indiceGanador = Math.floor(anguloMarcador / arco) % numOpciones;
+  let premioGanado = opcionesPremios[indiceGanador];
+
+  document.getElementById("mensaje-premio").innerText = "🎉 ¡Ganaste: " + premioGanado + "!";
+}
+</script>
 </body>
 </html>
