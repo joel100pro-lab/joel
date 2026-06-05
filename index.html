@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Página Épica de Joel</title>
+
+<title>JMM_STUDIOS BETA</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -19,7 +21,7 @@ background-size:400% 400%;
 animation:fondo 15s ease infinite;
 color:white;
 text-align:center;
-min-height:100vh;
+overflow-x:hidden;
 }
 
 @keyframes fondo{
@@ -38,7 +40,19 @@ animation:zoom 2s infinite;
 }
 
 @keyframes zoom{
-50%{transform:scale(1.05);}
+50%{
+transform:scale(1.05);
+}
+}
+
+.beta{
+background:gold;
+color:black;
+padding:15px;
+margin:20px;
+border-radius:15px;
+font-weight:bold;
+font-size:22px;
 }
 
 #verificacion{
@@ -48,6 +62,7 @@ max-width:350px;
 margin:auto;
 padding:20px;
 border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
 button{
@@ -55,183 +70,660 @@ padding:12px 20px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-margin:5px;
 font-size:16px;
+margin:5px;
 }
 
-#contenido{
+.menu{
 display:none;
-padding:20px;
+margin-top:20px;
 }
 
-.tarjetas{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
-margin-top:30px;
+.menu button{
+background:#00c853;
+color:white;
 }
 
-.tarjeta{
-background:rgba(255,255,255,0.1);
-width:250px;
-padding:20px;
-border-radius:15px;
-transition:.3s;
-}
-
-.tarjeta:hover{
-transform:translateY(-10px);
-}
-
-.galeria{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-margin-top:30px;
-}
-
-.galeria img{
-width:250px;
-height:180px;
-object-fit:cover;
-border-radius:15px;
-transition:.3s;
-}
-
-.galeria img:hover{
-transform:scale(1.08);
-}
-
-.contador{
-font-size:60px;
-font-weight:bold;
-margin:20px;
+.seccion{
+display:none;
+padding:30px;
 }
 
 footer{
+margin-top:100px;
 padding:30px;
-margin-top:40px;
+background:rgba(0,0,0,.3);
 }
 
-.modo{
-position:fixed;
-top:10px;
-right:10px;
+audio{
+margin-top:15px;
 }
 
-.oscuro{
-background:black;
-color:white;
-}
 </style>
 </head>
 
 <body>
 
-<!-- Música -->
-<audio id="musica" loop controls>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+<header>
+
+<h1>🚀 JMM_STUDIOS 🚀</h1>
+
+<p>Bienvenido a la versión beta</p>
+
+<div class="beta">
+🚧 ESTA ES UNA VERSIÓN BETA 🚧
+<br>
+Creada por JMM_STUDIOS
+</div>
+
+<audio id="musica" controls loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<button class="modo" onclick="cambiarModo()">🌙 Modo</button>
-
-<header>
-<h1>🚀 BIENVENIDO 🚀</h1>
-<p>La página épica de Joel</p>
 </header>
 
 <div id="verificacion">
+
 <h2>Verificación</h2>
+
 <br>
+
 <input type="checkbox" id="robot">
+
 <label>No soy un robot 🤖</label>
+
 <br><br>
+
 <button onclick="entrar()">Entrar</button>
+
 </div>
 
-<div id="contenido">
+<div class="menu" id="menu">
+
+<h2>MENÚ PRINCIPAL</h2>
+
+<button onclick="mostrar('inicio')">🏠 Inicio</button>
+
+<button onclick="mostrar('juegos')">🎮 Juegos</button>
+
+<button onclick="mostrar('galeria')">📸 Galería</button>
+
+<button onclick="mostrar('ruleta')">🎰 Ruleta</button>
+
+<button onclick="mostrar('perfil')">🏢 JMM_STUDIOS</button>
+
+</div>
+
+<div id="inicio" class="seccion">
 
 <h2>🎉 Bienvenido 🎉</h2>
 
-<div class="contador" id="contador">0</div>
+<p>Gracias por visitar la beta.</p>
 
-<div class="tarjetas">
-<div class="tarjeta"><h3>🎮 Juegos</h3><p>Contenido divertido.</p></div>
-<div class="tarjeta"><h3>🏆 Logros</h3><p>Desbloquea recompensas.</p></div>
-<div class="tarjeta"><h3>🎁 Premios</h3><p>Sorpresas ocultas.</p></div>
-<div class="tarjeta"><h3>⭐ Comunidad</h3><p>Explora la página.</p></div>
-<div class="tarjeta"><h3>🚀 Aventuras</h3><p>Descubre más.</p></div>
-<div class="tarjeta"><h3>🔥 Popular</h3><p>Contenido destacado.</p></div>
+<h1 id="contador">0</h1>
+
 </div>
 
-<h2 style="margin-top:40px;">📸 Galería</h2>
-
-<div class="galeria">
-<img src="https://picsum.photos/300?1">
-<img src="https://picsum.photos/300?2">
-<img src="https://picsum.photos/300?3">
-<img src="https://picsum.photos/300?4">
-<img src="https://picsum.photos/300?5">
-<img src="https://picsum.photos/300?6">
-<img src="https://picsum.photos/300?7">
-<img src="https://picsum.photos/300?8">
+<div id="juegos" class="seccion">
 </div>
 
-<br>
+<div id="galeria" class="seccion">
+</div>
 
-<button onclick="sorpresa()">🎁 Sorpresa</button>
+<div id="ruleta" class="seccion">
+</div>
 
-<h3 id="mensaje"></h3>
+<div id="perfil" class="seccion">
+
+<h2>🏢 JMM_STUDIOS</h2>
+
+<p>Versión Beta 1.0</p>
+
+<p>Más funciones próximamente.</p>
 
 </div>
 
 <footer>
-<h2>😎 Creado por Joel 😎</h2>
+
+<h2>⭐ JMM_STUDIOS ⭐</h2>
+
+<p>Versión Beta</p>
+
 </footer>
 
 <script>
-const musica = document.getElementById("musica");
-musica.volume = 0.2;
 
 function entrar(){
-  if(document.getElementById("robot").checked){
-    document.getElementById("verificacion").style.display="none";
-    document.getElementById("contenido").style.display="block";
 
-    // Intentar reproducir música después de interacción del usuario
-    musica.play().catch(()=>{});
-  }else{
-    alert("Marca la casilla primero.");
-  }
+if(document.getElementById("robot").checked){
+
+document.getElementById("verificacion").style.display="none";
+
+document.getElementById("menu").style.display="block";
+
+mostrar("inicio");
+
+let musica=document.getElementById("musica");
+
+musica.volume=0.2;
+
+musica.play().catch(()=>{});
+
+}else{
+
+alert("Marca la casilla primero.");
+
+}
+
+}
+
+function mostrar(id){
+
+let secciones=document.querySelectorAll(".seccion");
+
+secciones.forEach(sec=>sec.style.display="none");
+
+document.getElementById(id).style.display="block";
+
 }
 
 let numero=0;
+
 setInterval(()=>{
-  if(numero<50000){
-    numero+=50;
-    document.getElementById("contador").innerText=numero;
-  }
+
+if(numero<50000){
+
+numero+=50;
+
+document.getElementById("contador").innerText=numero;
+
+}
+
 },10);
 
-function sorpresa(){
-  let mensajes=[
-    "🎉 Increíble",
-    "🚀 Sigue explorando",
-    "🏆 Has ganado experiencia",
-    "⭐ Encontraste un secreto",
-    "🎁 Premio misterioso"
-  ];
+document.getElementById("galeria").innerHTML = `
 
-  document.getElementById("mensaje").innerText=
-    mensajes[Math.floor(Math.random()*mensajes.length)];
+<h2>📸 GALERÍA ÉPICA 📸</h2>
+
+<p>Versión Beta de JMM_STUDIOS</p>
+
+<br>
+
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+
+<img src="https://picsum.photos/300?1" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?2" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?3" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?4" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?5" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?6" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?7" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?8" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?9" style="width:300px;border-radius:15px;">
+<img src="https://picsum.photos/300?10" style="width:300px;border-radius:15px;">
+
+</div>
+
+`;
+
+document.getElementById("juegos").innerHTML = `
+
+<h2>🎮 CENTRO DE JUEGOS 🎮</h2>
+
+<br>
+
+<div style="background:rgba(255,255,255,.1);padding:20px;border-radius:20px;max-width:700px;margin:auto;">
+
+<h3>⚡ Juego de Clics ⚡</h3>
+
+<p>Haz clic para ganar puntos.</p>
+
+<h1 id="puntos">0</h1>
+
+<button onclick="sumarPuntos()">+1 Punto</button>
+
+</div>
+
+<br>
+
+<div style="background:rgba(255,255,255,.1);padding:20px;border-radius:20px;max-width:700px;margin:auto;">
+
+<h3>🎲 Número Secreto 🎲</h3>
+
+<input id="numeroUsuario" type="number">
+
+<button onclick="adivinarNumero()">Adivinar</button>
+
+<p id="resultadoNumero"></p>
+
+</div>
+
+`;
+
+let puntos = 0;
+
+function sumarPuntos(){
+
+puntos++;
+
+document.getElementById("puntos").innerText = puntos;
+
 }
 
-function cambiarModo(){
-  document.body.classList.toggle("oscuro");
+let numeroSecreto = Math.floor(Math.random()*10)+1;
+
+function adivinarNumero(){
+
+let n = parseInt(document.getElementById("numeroUsuario").value);
+
+if(n===numeroSecreto){
+
+document.getElementById("resultadoNumero").innerText =
+"🎉 ¡Correcto!";
+
+numeroSecreto=Math.floor(Math.random()*10)+1;
+
+}else{
+
+document.getElementById("resultadoNumero").innerText =
+"❌ Intenta otra vez";
+
 }
+
+}
+document.getElementById("ruleta").innerHTML = `
+
+<h2>🎰 RULETA PERSONALIZABLE 🎰</h2>
+
+<p>Escribe premios separados por comas</p>
+
+<input id="opcionesRuleta"
+placeholder="Pizza,Tacos,Hamburguesa"
+style="padding:10px;width:300px;">
+
+<br><br>
+
+<button onclick="girarRuleta()">🎲 GIRAR</button>
+
+<h1 id="resultadoRuleta">🎰</h1>
+
+<hr style="margin:40px;">
+
+<h2>✊ PIEDRA PAPEL O TIJERA ✋</h2>
+
+<button onclick="ppt('Piedra')">🪨 Piedra</button>
+
+<button onclick="ppt('Papel')">📄 Papel</button>
+
+<button onclick="ppt('Tijera')">✂️ Tijera</button>
+
+<h3 id="resultadoPPT"></h3>
+
+<hr style="margin:40px;">
+
+<h2>🏆 SISTEMA DE NIVELES 🏆</h2>
+
+<h1 id="nivel">1</h1>
+
+<p>Gana puntos en los juegos para subir.</p>
+
+`;
+
+function girarRuleta(){
+
+let texto =
+document.getElementById("opcionesRuleta").value;
+
+if(texto.trim()==""){
+
+alert("Escribe al menos un premio");
+
+return;
+
+}
+
+let premios = texto.split(",");
+
+let ganador =
+premios[Math.floor(Math.random()*premios.length)];
+
+document.getElementById("resultadoRuleta").innerText =
+"🏆 " + ganador.trim();
+
+}
+
+function ppt(usuario){
+
+let opciones=["Piedra","Papel","Tijera"];
+
+let cpu =
+opciones[Math.floor(Math.random()*3)];
+
+let mensaje="";
+
+if(usuario===cpu){
+
+mensaje="🤝 Empate";
+
+}else if(
+(usuario==="Piedra" && cpu==="Tijera") ||
+(usuario==="Papel" && cpu==="Piedra") ||
+(usuario==="Tijera" && cpu==="Papel")
+){
+
+mensaje="🎉 Ganaste";
+
+puntos+=5;
+
+}else{
+
+mensaje="😢 Perdiste";
+
+}
+
+document.getElementById("resultadoPPT").innerText =
+"CPU: " + cpu + " | " + mensaje;
+
+actualizarNivel();
+
+}
+
+function actualizarNivel(){
+
+let nivel =
+Math.floor((puntos/20))+1;
+
+let etiqueta =
+document.getElementById("nivel");
+
+if(etiqueta){
+
+etiqueta.innerText=nivel;
+
+}
+
+}
+document.getElementById("inicio").innerHTML += `
+
+<hr style="margin:40px;">
+
+<h2>⭐ EXPERIENCIA ⭐</h2>
+
+<div style="
+width:80%;
+max-width:700px;
+height:40px;
+background:#222;
+margin:auto;
+border-radius:20px;
+overflow:hidden;
+">
+
+<div id="barraXP" style="
+height:100%;
+width:0%;
+background:lime;
+transition:.5s;
+">
+</div>
+
+</div>
+
+<br>
+
+<h2>🏆 LOGROS 🏆</h2>
+
+<div id="logros">
+
+❌ 100 puntos<br>
+❌ 250 puntos<br>
+❌ 500 puntos<br>
+
+</div>
+
+<br>
+
+<button onclick="cajaSorpresa()">
+🎁 CAJA SORPRESA
+</button>
+
+<h2 id="premioSorpresa"></h2>
+
+`;
+
+function actualizarNivel(){
+
+let nivel=Math.floor((puntos/20))+1;
+
+let etiqueta=document.getElementById("nivel");
+
+if(etiqueta){
+etiqueta.innerText=nivel;
+}
+
+let porcentaje=(puntos%20)*5;
+
+let barra=document.getElementById("barraXP");
+
+if(barra){
+barra.style.width=porcentaje+"%";
+}
+
+let logros="";
+
+logros += puntos>=100 ? "✅ 100 puntos<br>" : "❌ 100 puntos<br>";
+
+logros += puntos>=250 ? "✅ 250 puntos<br>" : "❌ 250 puntos<br>";
+
+logros += puntos>=500 ? "✅ 500 puntos<br>" : "❌ 500 puntos<br>";
+
+let caja=document.getElementById("logros");
+
+if(caja){
+caja.innerHTML=logros;
+}
+
+}
+
+function cajaSorpresa(){
+
+let premios=[
+
+"🍕 Pizza",
+"🚀 Cohete",
+"🏆 Trofeo",
+"🎮 Videojuego",
+"⭐ Estrella",
+"💎 Diamante",
+"🎁 Caja Legendaria",
+"👑 Corona"
+
+];
+
+let premio=
+premios[Math.floor(Math.random()*premios.length)];
+
+document.getElementById("premioSorpresa").innerText=
+premio;
+
+}
+
+setInterval(()=>{
+
+let estrellas=document.createElement("div");
+
+estrellas.innerHTML="⭐";
+
+estrellas.style.position="fixed";
+
+estrellas.style.left=Math.random()*100+"vw";
+
+estrellas.style.top="-20px";
+
+estrellas.style.fontSize="20px";
+
+estrellas.style.pointerEvents="none";
+
+document.body.appendChild(estrellas);
+
+let pos=0;
+
+let anim=setInterval(()=>{
+
+pos+=4;
+
+estrellas.style.top=pos+"px";
+
+if(pos>window.innerHeight){
+
+clearInterval(anim);
+
+estrellas.remove();
+
+}
+
+},20);
+
+},800);
+document.body.insertAdjacentHTML("afterbegin", `
+
+<button id="modoOscuroBtn"
+style="
+position:fixed;
+top:10px;
+right:10px;
+z-index:999;
+padding:10px;
+border:none;
+border-radius:10px;
+background:black;
+color:white;
+cursor:pointer;
+">
+🌙 Modo Oscuro
+</button>
+
+`);
+
+let oscuro=false;
+
+document.getElementById("modoOscuroBtn")
+.addEventListener("click",()=>{
+
+oscuro=!oscuro;
+
+if(oscuro){
+
+document.body.style.background="#000";
+document.body.style.color="#fff";
+
+}else{
+
+document.body.style.background="";
+document.body.style.color="";
+
+}
+
+});
+
+document.getElementById("perfil").innerHTML += `
+
+<hr style="margin:40px;">
+
+<h2>📊 ESTADÍSTICAS</h2>
+
+<p id="statsPuntos">Puntos: 0</p>
+
+<p id="statsNivel">Nivel: 1</p>
+
+<br>
+
+<button onclick="mostrarConfeti()">
+🎆 CELEBRAR
+</button>
+
+<br><br>
+
+<h2>🚧 BETA OFICIAL 🚧</h2>
+
+<p>
+Esta página está en desarrollo.
+Próximamente habrá más funciones.
+</p>
+
+`;
+
+setInterval(()=>{
+
+let sp=document.getElementById("statsPuntos");
+let sn=document.getElementById("statsNivel");
+
+if(sp) sp.innerText="Puntos: "+puntos;
+
+if(sn){
+let nivel=Math.floor((puntos/20))+1;
+sn.innerText="Nivel: "+nivel;
+}
+
+},500);
+
+function mostrarConfeti(){
+
+for(let i=0;i<80;i++){
+
+let conf=document.createElement("div");
+
+conf.innerHTML="🎉";
+
+conf.style.position="fixed";
+
+conf.style.left=Math.random()*100+"vw";
+
+conf.style.top="-50px";
+
+conf.style.fontSize=(20+Math.random()*25)+"px";
+
+conf.style.pointerEvents="none";
+
+document.body.appendChild(conf);
+
+let pos=0;
+
+let velocidad=2+Math.random()*6;
+
+let anim=setInterval(()=>{
+
+pos+=velocidad;
+
+conf.style.top=pos+"px";
+
+if(pos>window.innerHeight){
+
+clearInterval(anim);
+
+conf.remove();
+
+}
+
+},20);
+
+}
+
+}
+
+document.getElementById("perfil").innerHTML += `
+
+<br><br>
+
+<h1>🏢 JMM_STUDIOS 🏢</h1>
+
+<p>Versión Beta 1.0</p>
+
+<p>Gracias por probar nuestro proyecto.</p>
+
+<h2>⭐ TODOS LOS DERECHOS RESERVADOS ⭐</h2>
+
+`;
+
+console.log("JMM_STUDIOS BETA CARGADA");
 </script>
-
-</body>
-</html>
