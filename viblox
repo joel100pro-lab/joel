@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibLOX</title>
 
+<style>
+
+body{
+margin:0;
+padding:0;
+background:black;
+color:white;
+font-family:Arial,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+overflow:hidden;
+position: relative; /* Necesario para que las estrellas no se muevan de su lugar */
+}
+
+/* Estilo para las estrellas de fondo */
+.estrella {
+position: absolute;
+background-color: white;
+border-radius: 50%;
+pointer-events: none; /* Hace que las estrellas no interfieran con los clics */
+z-index: 0; /* Las mantiene al fondo */
+}
+
+.contenedor{
+width:90%;
+max-width:900px;
+position: relative;
+z-index: 1; /* Pone el contenido por encima de las estrellas */
+}
+
+.logo{
+font-size:90px;
+font-weight:bold;
+letter-spacing:8px;
+color:white;
+text-shadow:0 0 15px white;
+animation:brillo 2s infinite;
+}
+
+@keyframes brillo{
+50%{
+text-shadow:
+0 0 10px white,
+0 0 20px white,
+0 0 40px white;
+}
+}
+
+.version{
+font-size:22px;
+margin-top:10px;
+opacity:.8;
+}
+
+.creador{
+font-size:18px;
+margin-top:10px;
+opacity:.8;
+}
+
+.redes{
+margin-top:40px;
+}
+
+.boton-red{
+padding:15px 25px;
+margin:10px;
+border:none;
+border-radius:15px;
+background:white;
+color:black;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+.boton-red:hover{
+transform:scale(1.1);
+}
+
+.boton-entrar{
+margin-top:50px;
+padding:20px 60px;
+font-size:28px;
+font-weight:bold;
+border:none;
+border-radius:20px;
+background:white;
+color:black;
+cursor:pointer;
+transition:.3s;
+}
+
+.boton-entrar:hover{
+transform:scale(1.1);
+box-shadow:0 0 20px white;
+}
+
+a{
+text-decoration:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="contenedor">
+
+<div class="logo">
+VibLOX
+</div>
+
+<div class="version">
+🚀 Versión 3.0
+</div>
+
+<div class="creador">
+Creada por el equipo VibLOXstudios
+</div>
+
+<div class="redes">
+
+<a href="https://www.tiktok.com/@11_joel_11?_r=1&_t=ZS-96y5bJt3TG9" target="_blank">
+<button class="boton-red">
+🎵 TikTok
+</button>
+</a>
+
+<a href="https://www.instagram.com/joel0228000" target="_blank">
+<button class="boton-red">
+📸 Instagram
+</button>
+</a>
+
+</div>
+
+<button class="boton-entrar" onclick="entrar()">
+ENTRAR
+</button>
+
+</div>
+
+<script>
+
+function entrar(){
+alert("🚀 Bienvenido a VibLOX");
+}
+
+// --- GENERADOR DE ESTRELLAS ---
+function crearEstrellas() {
+const numeroEstrellas = 100; // Puedes subir o bajar este número si quieres más o menos estrellas
+
+for (let i = 0; i < numeroEstrellas; i++) {
+const estrella = document.createElement('div');
+estrella.classList.add('estrella');
+
+// Tamaños pequeños aleatorios (entre 1px y 3px) para que se vean finas
+const tamano = Math.random() * 2 + 1;
+estrella.style.width = tamano + 'px';
+estrella.style.height = tamano + 'px';
+
+// Posiciones aleatorias en toda la pantalla
+estrella.style.left = Math.random() * 100 + 'vw';
+estrella.style.top = Math.random() * 100 + 'vh';
+
+// Opacidad "en bajito" (entre 0.1 y 0.5) para que no cansen la vista
+estrella.style.opacity = Math.random() * 0.4 + 0.1;
+
+document.body.appendChild(estrella);
+}
+}
+
+// Ejecutar la función al cargar la página
+crearEstrellas();
+
+</script>
+
+</body>
+</html>
