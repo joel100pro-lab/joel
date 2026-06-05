@@ -1600,5 +1600,109 @@ abrirSeccion = function(idSeccion) {
   }
 }
 </script>
+<!-- ======================================================== -->
+<!-- PARTE 6: SISTEMA DE AUDIO COMPATIBLE CON NAVEGADORES    -->
+<!-- ======================================================== -->
+
+<!-- 🎵 REPRODUCTOR DE AUDIO PRINCIPAL 🎵 -->
+<!-- Puedes cambiar este enlace por la canción que más te guste -->
+<audio id="musica-global-viblox" loop src="https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3"></audio>
+
+<!-- 🚨 BOTÓN FLOTANTE PARA FORZAR EL AUDIO 🚨 -->
+<div id="reproductor-flotante" onclick="forzarSonidoPagina()" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #00ffcc, #0077ff);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    cursor: pointer;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: pulsoBotonAudio 2s infinite;
+    user-select: none;
+">
+  <span id="icono-reproductor">🎵</span> 
+  <span id="texto-reproductor">Activar Música</span>
+</div>
+
+<!-- 🎨 ESTILOS PARA EL BOTÓN DE AUDIO 🎨 -->
+<style>
+@keyframes pulsoBotonAudio {
+  0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0, 255, 204, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(0, 119, 255, 0.7); }
+  100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0, 255, 204, 0.4); }
+}
+</style>
+
+<!-- 🧠 SCRIPT INTELIGENTE DE AUDIO CON DESBLOQUEO AUTOMÁTICO 🧠 -->
+<script>
+// Intentar reproducir automáticamente en cuanto el usuario haga CUALQUIER clic en la pantalla
+document.addEventListener('click', () => {
+    const audio = document.getElementById('musica-global-viblox');
+    if (audio && audio.paused) {
+        audio.play().then(() => {
+            actualizarInterfazAudio(true);
+        }).catch(e => console.log("Esperando interacción fuerte..."));
+    }
+}, { once: false }); // Escucha constantemente hasta que se active
+
+// Función del botón flotante para encender/apagar manualmente
+function forzarSonidoPagina() {
+    const audio = document.getElementById('musica-global-viblox');
+    const texto = document.getElementById('texto-reproductor');
+    const icono = document.getElementById('icono-reproductor');
+    
+    if (!audio) return;
+
+    if (audio.paused) {
+        audio.play().then(() => {
+            actualizarInterfazAudio(true);
+        }).catch(err => {
+            alert("Haz clic en cualquier parte de la pantalla primero para que el navegador permita el sonido.");
+        });
+    } else {
+        audio.pause();
+        actualizarInterfazAudio(false);
+    }
+}
+
+// Cambia el diseño del botón dependiendo de si suena o no
+function actualizarInterfazAudio(estaSonando) {
+    const texto = document.getElementById('texto-reproductor');
+    const icono = document.getElementById('icono-reproductor');
+    const boton = document.getElementById('reproductor-flotante');
+    
+    if (estaSonando) {
+        texto.innerText = "Música: ENCENDIDA";
+        icono.innerText = "🔊";
+        boton.style.background = "linear-gradient(135deg, #11ff22, #00aa11)";
+    } else {
+        texto.innerText = "Música: PAUSADA";
+        icono.innerText = "🔇";
+        boton.style.background = "linear-gradient(135deg, #ff3366, #aa0022)";
+    }
+}
+
+// Integración con tu botón de "ENTRAR" original de la pantalla de inicio
+document.addEventListener("DOMContentLoaded", () => {
+    const botonEntrarOriginal = document.querySelector('.contenedor button, .boton-entrar');
+    if (botonEntrarOriginal) {
+        botonEntrarOriginal.addEventListener('click', () => {
+            setTimeout(() => {
+                const audio = document.getElementById('musica-global-viblox');
+                if(audio) audio.play().then(() => actualizarInterfazAudio(true)).catch(e => console.log(e));
+            }, 100);
+        });
+    }
+});
+</script>
 </body>
 </html>
