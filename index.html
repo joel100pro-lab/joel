@@ -317,5 +317,383 @@ p.remove();
 </script>
 
 </section>
+<!-- =========================
+     ACTUALIZACIÓN OMEGA-X
+     PÉGALA ANTES DE </body>
+========================= -->
+
+<style>
+
+#omegaBtn{
+position:fixed;
+top:20px;
+left:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+background:white;
+cursor:pointer;
+z-index:99999;
+box-shadow:
+0 0 20px white,
+0 0 50px white;
+animation:omegaPulse 2s infinite;
+}
+
+@keyframes omegaPulse{
+50%{
+transform:scale(1.15);
+}
+}
+
+#omegaScreen{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+z-index:999999;
+overflow:hidden;
+}
+
+#matrix{
+position:absolute;
+inset:0;
+opacity:.2;
+}
+
+#omegaContent{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+width:90%;
+max-width:1000px;
+color:white;
+}
+
+#omegaTitle{
+font-size:6vw;
+font-weight:900;
+letter-spacing:10px;
+text-shadow:
+0 0 10px white,
+0 0 20px white,
+0 0 40px white;
+}
+
+#omegaDesc{
+margin-top:20px;
+font-size:20px;
+opacity:.8;
+}
+
+#levelBox{
+margin-top:50px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.levelCard{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.15);
+padding:25px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+transition:.3s;
+cursor:pointer;
+}
+
+.levelCard:hover{
+transform:translateY(-10px);
+box-shadow:0 0 20px white;
+}
+
+.levelCard h2{
+margin-bottom:10px;
+}
+
+.levelCard p{
+opacity:.7;
+}
+
+#secretMessage{
+margin-top:40px;
+font-size:25px;
+min-height:40px;
+}
+
+#closeOmega{
+margin-top:40px;
+padding:15px 35px;
+font-size:18px;
+border:none;
+cursor:pointer;
+background:white;
+color:black;
+border-radius:50px;
+font-weight:bold;
+}
+
+#achievement{
+position:fixed;
+bottom:-100px;
+left:50%;
+transform:translateX(-50%);
+background:white;
+color:black;
+padding:20px 35px;
+border-radius:15px;
+font-weight:bold;
+transition:.5s;
+z-index:9999999;
+}
+
+#radar{
+position:absolute;
+width:400px;
+height:400px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,.2);
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+pointer-events:none;
+}
+
+#scan{
+position:absolute;
+width:2px;
+height:200px;
+background:white;
+left:50%;
+top:50%;
+transform-origin:bottom;
+animation:spin 4s linear infinite;
+}
+
+@keyframes spin{
+from{
+transform:translateX(-50%) rotate(0deg);
+}
+to{
+transform:translateX(-50%) rotate(360deg);
+}
+}
+
+</style>
+
+<div id="omegaBtn"></div>
+
+<div id="omegaScreen">
+
+<canvas id="matrix"></canvas>
+
+<div id="radar">
+<div id="scan"></div>
+</div>
+
+<div id="omegaContent">
+
+<div id="omegaTitle">
+OMEGA-X
+</div>
+
+<div id="omegaDesc">
+NIVEL OCULTO DETECTADO
+</div>
+
+<div id="levelBox">
+
+<div class="levelCard" onclick="unlock(1)">
+<h2>RANGO 01</h2>
+<p>Iniciar análisis</p>
+</div>
+
+<div class="levelCard" onclick="unlock(2)">
+<h2>RANGO 02</h2>
+<p>Escaneo avanzado</p>
+</div>
+
+<div class="levelCard" onclick="unlock(3)">
+<h2>RANGO 03</h2>
+<p>Acceso prohibido</p>
+</div>
+
+<div class="levelCard" onclick="unlock(4)">
+<h2>RANGO 04</h2>
+<p>Clasificación máxima</p>
+</div>
+
+</div>
+
+<div id="secretMessage"></div>
+
+<button id="closeOmega">
+CERRAR
+</button>
+
+</div>
+
+</div>
+
+<div id="achievement">
+LOGRO DESBLOQUEADO
+</div>
+
+<script>
+
+const omegaBtn=document.getElementById("omegaBtn");
+const omegaScreen=document.getElementById("omegaScreen");
+
+omegaBtn.onclick=()=>{
+omegaScreen.style.display="block";
+};
+
+document.getElementById("closeOmega").onclick=()=>{
+omegaScreen.style.display="none";
+};
+
+function unlock(level){
+
+const msg=document.getElementById("secretMessage");
+
+const mensajes=[
+"",
+"ESCANEO COMPLETO...",
+"SEÑAL DETECTADA...",
+"ACCESO RESTRINGIDO SUPERADO...",
+"CLASIFICACIÓN FINAL: LEYENDA"
+];
+
+let texto=mensajes[level];
+
+msg.innerHTML="";
+
+let i=0;
+
+let efecto=setInterval(()=>{
+
+msg.innerHTML+=texto[i] || "";
+
+i++;
+
+if(i>texto.length){
+clearInterval(efecto);
+
+mostrarLogro(
+"RANGO "+level+" DESBLOQUEADO"
+);
+
+}
+
+},60);
+
+}
+
+function mostrarLogro(texto){
+
+const logro=document.getElementById("achievement");
+
+logro.innerHTML=texto;
+
+logro.style.bottom="30px";
+
+setTimeout(()=>{
+logro.style.bottom="-100px";
+},3000);
+
+}
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let letras="01JOELXOMEGASYSTEM";
+
+letras=letras.split("");
+
+let fontSize=16;
+
+let columns=canvas.width/fontSize;
+
+let drops=[];
+
+for(let i=0;i<columns;i++){
+drops[i]=1;
+}
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.08)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+let text=
+letras[
+Math.floor(
+Math.random()*letras.length
+)
+];
+
+ctx.fillText(
+text,
+i*fontSize,
+drops[i]*fontSize
+);
+
+if(
+drops[i]*fontSize>
+canvas.height &&
+Math.random()>0.975
+){
+drops[i]=0;
+}
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,35);
+
+let codigo="";
+
+document.addEventListener("keydown",(e)=>{
+
+codigo+=e.key.toLowerCase();
+
+if(codigo.includes("joel")){
+
+mostrarLogro(
+"MODO SECRETO ACTIVADO"
+);
+
+document.body.style.filter=
+"contrast(120%) brightness(120%)";
+
+setTimeout(()=>{
+document.body.style.filter="";
+},5000);
+
+codigo="";
+
+}
+
+if(codigo.length>30){
+codigo="";
+}
+
+});
+
+</script>
 </body>
 </html>
