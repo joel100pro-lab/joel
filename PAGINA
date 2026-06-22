@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto JX-EL</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+body{
+background:#000;
+overflow:hidden;
+height:100vh;
+color:white;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.center{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
+
+.logo{
+font-size:7vw;
+font-weight:900;
+letter-spacing:10px;
+text-shadow:
+0 0 10px #fff,
+0 0 20px #fff,
+0 0 40px #fff;
+animation:pulse 2s infinite;
+}
+
+.sub{
+margin-top:15px;
+font-size:1rem;
+opacity:.8;
+letter-spacing:4px;
+}
+
+.btn{
+margin-top:40px;
+padding:15px 40px;
+background:white;
+color:black;
+border:none;
+font-size:1rem;
+font-weight:bold;
+cursor:pointer;
+border-radius:50px;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+.portal{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.portal h1{
+font-size:8vw;
+text-shadow:0 0 20px white;
+}
+
+.portal p{
+margin-top:20px;
+font-size:1.2rem;
+opacity:.8;
+}
+
+@keyframes pulse{
+50%{
+transform:scale(1.05);
+}
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="center">
+<div class="logo">JX-EL</div>
+<div class="sub">ACCESO DESCONOCIDO</div>
+<button class="btn" onclick="activar()">ENTRAR</button>
+</div>
+
+<div class="portal" id="portal">
+<h1 id="mensaje"></h1>
+<p>SISTEMA ACTIVADO</p>
+</div>
+
+<script>
+
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let stars=[];
+
+for(let i=0;i<250;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
+}
+
+function animate(){
+ctx.fillStyle="black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+stars.forEach(s=>{
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+
+s.y+=s.r+0.3;
+
+if(s.y>canvas.height){
+s.y=0;
+s.x=Math.random()*canvas.width;
+}
+});
+
+requestAnimationFrame(animate);
+}
+
+animate();
+
+function activar(){
+
+document.querySelector(".center").style.display="none";
+document.getElementById("portal").style.display="flex";
+
+let texto="BIENVENIDO JOEL";
+let i=0;
+
+let intervalo=setInterval(()=>{
+
+document.getElementById("mensaje").innerHTML+=texto[i];
+
+i++;
+
+if(i>=texto.length){
+clearInterval(intervalo);
+}
+
+},120);
+
+}
+
+</script>
+
+</body>
+</html>
