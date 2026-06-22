@@ -3,187 +3,181 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VibLOX</title>
+<title>Proyecto JX-EL</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-body{
+*{
 margin:0;
 padding:0;
-background:black;
-color:white;
-font-family:Arial,sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+body{
+background:#000;
 overflow:hidden;
-position: relative; /* Necesario para que las estrellas no se muevan de su lugar */
+height:100vh;
+color:white;
 }
 
-/* Estilo para las estrellas de fondo */
-.estrella {
-position: absolute;
-background-color: white;
-border-radius: 50%;
-pointer-events: none; /* Hace que las estrellas no interfieran con los clics */
-z-index: 0; /* Las mantiene al fondo */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
-.contenedor{
-width:90%;
-max-width:900px;
-position: relative;
-z-index: 1; /* Pone el contenido por encima de las estrellas */
+.center{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
 }
 
 .logo{
-font-size:90px;
-font-weight:bold;
-letter-spacing:8px;
-color:white;
-text-shadow:0 0 15px white;
-animation:brillo 2s infinite;
-}
-
-@keyframes brillo{
-50%{
+font-size:7vw;
+font-weight:900;
+letter-spacing:10px;
 text-shadow:
-0 0 10px white,
-0 0 20px white,
-0 0 40px white;
-}
+0 0 10px #fff,
+0 0 20px #fff,
+0 0 40px #fff;
+animation:pulse 2s infinite;
 }
 
-.version{
-font-size:22px;
-margin-top:10px;
+.sub{
+margin-top:15px;
+font-size:1rem;
 opacity:.8;
+letter-spacing:4px;
 }
 
-.creador{
-font-size:18px;
-margin-top:10px;
-opacity:.8;
-}
-
-.redes{
+.btn{
 margin-top:40px;
-}
-
-.boton-red{
-padding:15px 25px;
-margin:10px;
-border:none;
-border-radius:15px;
+padding:15px 40px;
 background:white;
 color:black;
-font-size:18px;
+border:none;
+font-size:1rem;
 font-weight:bold;
 cursor:pointer;
+border-radius:50px;
 transition:.3s;
 }
 
-.boton-red:hover{
+.btn:hover{
 transform:scale(1.1);
 }
 
-.boton-entrar{
-margin-top:50px;
-padding:20px 60px;
-font-size:28px;
-font-weight:bold;
-border:none;
-border-radius:20px;
-background:white;
-color:black;
-cursor:pointer;
-transition:.3s;
+.portal{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
 }
 
-.boton-entrar:hover{
-transform:scale(1.1);
-box-shadow:0 0 20px white;
+.portal h1{
+font-size:8vw;
+text-shadow:0 0 20px white;
 }
 
-a{
-text-decoration:none;
+.portal p{
+margin-top:20px;
+font-size:1.2rem;
+opacity:.8;
 }
 
+@keyframes pulse{
+50%{
+transform:scale(1.05);
+}
+}
 </style>
-
 </head>
 <body>
 
-<div class="contenedor">
+<canvas id="stars"></canvas>
 
-<div class="logo">
-VibLOX
+<div class="center">
+<div class="logo">JX-EL</div>
+<div class="sub">ACCESO DESCONOCIDO</div>
+<button class="btn" onclick="activar()">ENTRAR</button>
 </div>
 
-<div class="version">
-🚀 Versión 3.0
-</div>
-
-<div class="creador">
-Creada por el equipo VibLOXstudios
-</div>
-
-<div class="redes">
-
-<a href="https://www.tiktok.com/@11_joel_11?_r=1&_t=ZS-96y5bJt3TG9" target="_blank">
-<button class="boton-red">
-🎵 TikTok
-</button>
-</a>
-
-<a href="https://www.instagram.com/joel0228000" target="_blank">
-<button class="boton-red">
-📸 Instagram
-</button>
-</a>
-
-</div>
-
-<button class="boton-entrar" onclick="entrar()">
-ENTRAR
-</button>
-
+<div class="portal" id="portal">
+<h1 id="mensaje"></h1>
+<p>SISTEMA ACTIVADO</p>
 </div>
 
 <script>
 
-function entrar(){
-alert("🚀 Bienvenido a VibLOX");
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let stars=[];
+
+for(let i=0;i<250;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
 }
 
-// --- GENERADOR DE ESTRELLAS ---
-function crearEstrellas() {
-const numeroEstrellas = 100; // Puedes subir o bajar este número si quieres más o menos estrellas
+function animate(){
+ctx.fillStyle="black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
 
-for (let i = 0; i < numeroEstrellas; i++) {
-const estrella = document.createElement('div');
-estrella.classList.add('estrella');
+ctx.fillStyle="white";
 
-// Tamaños pequeños aleatorios (entre 1px y 3px) para que se vean finas
-const tamano = Math.random() * 2 + 1;
-estrella.style.width = tamano + 'px';
-estrella.style.height = tamano + 'px';
+stars.forEach(s=>{
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
 
-// Posiciones aleatorias en toda la pantalla
-estrella.style.left = Math.random() * 100 + 'vw';
-estrella.style.top = Math.random() * 100 + 'vh';
+s.y+=s.r+0.3;
 
-// Opacidad "en bajito" (entre 0.1 y 0.5) para que no cansen la vista
-estrella.style.opacity = Math.random() * 0.4 + 0.1;
-
-document.body.appendChild(estrella);
+if(s.y>canvas.height){
+s.y=0;
+s.x=Math.random()*canvas.width;
 }
+});
+
+requestAnimationFrame(animate);
 }
 
-// Ejecutar la función al cargar la página
-crearEstrellas();
+animate();
+
+function activar(){
+
+document.querySelector(".center").style.display="none";
+document.getElementById("portal").style.display="flex";
+
+let texto="BIENVENIDO JOEL";
+let i=0;
+
+let intervalo=setInterval(()=>{
+
+document.getElementById("mensaje").innerHTML+=texto[i];
+
+i++;
+
+if(i>=texto.length){
+clearInterval(intervalo);
+}
+
+},120);
+
+}
 
 </script>
 
