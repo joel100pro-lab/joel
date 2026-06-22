@@ -181,5 +181,141 @@ clearInterval(intervalo);
 
 </script>
 
+<section id="vault">
+
+<style>
+#vault{
+position:fixed;
+bottom:25px;
+right:25px;
+z-index:9999;
+}
+
+#orb{
+width:90px;
+height:90px;
+border-radius:50%;
+background:white;
+box-shadow:
+0 0 20px white,
+0 0 40px white,
+0 0 80px white;
+cursor:pointer;
+animation:orbFloat 3s infinite ease-in-out;
+}
+
+@keyframes orbFloat{
+50%{
+transform:translateY(-15px);
+}
+}
+
+#terminal{
+display:none;
+position:fixed;
+inset:0;
+background:black;
+color:white;
+font-family:monospace;
+padding:40px;
+overflow:auto;
+}
+
+#line{
+white-space:pre-wrap;
+font-size:20px;
+}
+</style>
+
+<div id="orb"></div>
+
+<div id="terminal">
+<div id="line"></div>
+</div>
+
+<script>
+
+const orb=document.getElementById("orb");
+
+orb.onclick=()=>{
+
+document.getElementById("terminal").style.display="block";
+
+const mensajes=[
+
+"ESCANEANDO USUARIO...",
+"",
+"ACCESO ENCONTRADO",
+"",
+"IDENTIFICADOR: JOEL",
+"",
+"BUSCANDO DATOS...",
+"",
+"█████████████████ 100%",
+"",
+"RESULTADO:",
+"",
+"EL SISTEMA DETERMINA QUE ERES",
+"EL PERSONAJE PRINCIPAL.",
+"",
+"NO ERES UN VISITANTE.",
+"",
+"ERES PARTE DEL SISTEMA.",
+"",
+"SECUENCIA COMPLETADA."
+
+];
+
+let i=0;
+
+const escribir=setInterval(()=>{
+
+if(i<mensajes.length){
+
+document.getElementById("line").innerHTML +=
+mensajes[i] + "<br>";
+
+window.scrollTo(0,document.body.scrollHeight);
+
+i++;
+
+}else{
+
+clearInterval(escribir);
+
+setTimeout(()=>{
+
+for(let x=0;x<150;x++){
+
+let p=document.createElement("div");
+
+p.style.position="fixed";
+p.style.left=Math.random()*100+"vw";
+p.style.top=Math.random()*100+"vh";
+p.style.width="4px";
+p.style.height="4px";
+p.style.background="white";
+p.style.borderRadius="50%";
+p.style.boxShadow="0 0 10px white";
+
+document.body.appendChild(p);
+
+setTimeout(()=>{
+p.remove();
+},3000);
+
+}
+
+},1000);
+
+}
+
+},350);
+
+};
+
+</script>
+
+</section>
 </body>
 </html>
