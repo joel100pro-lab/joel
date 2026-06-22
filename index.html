@@ -695,5 +695,80 @@ codigo="";
 });
 
 </script>
+<style>
+#secretBtn{
+position:fixed;
+top:20px;
+right:20px;
+width:80px;
+height:80px;
+border-radius:50%;
+background:white;
+color:black;
+font-weight:bold;
+cursor:pointer;
+z-index:999999;
+border:none;
+}
+
+#secretPanel{
+display:none;
+position:fixed;
+inset:0;
+background:black;
+color:white;
+z-index:9999999;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-family:Arial;
+}
+
+#secretTitle{
+font-size:70px;
+margin-bottom:20px;
+text-shadow:0 0 20px white;
+}
+
+#counter{
+font-size:40px;
+}
+</style>
+
+<button id="secretBtn">Ω</button>
+
+<div id="secretPanel">
+<h1 id="secretTitle">MODO OMEGA</h1>
+<div id="counter">0%</div>
+</div>
+
+<script>
+
+document.getElementById("secretBtn").onclick=()=>{
+
+document.getElementById("secretPanel").style.display="flex";
+
+let n=0;
+
+let carga=setInterval(()=>{
+
+n++;
+
+document.getElementById("counter").innerHTML=n+"%";
+
+if(n>=100){
+
+clearInterval(carga);
+
+document.getElementById("secretTitle").innerHTML=
+"BIENVENIDO JOEL";
+
+}
+
+},40);
+
+};
+
+</script>
 </body>
 </html>
