@@ -770,5 +770,160 @@ document.getElementById("secretTitle").innerHTML=
 };
 
 </script>
+<style>
+#neonPanel{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+z-index:999999;
+color:white;
+font-family:Arial;
+overflow:hidden;
+}
+
+#openNeon{
+position:fixed;
+bottom:20px;
+right:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+background:white;
+border:none;
+cursor:pointer;
+z-index:9999999;
+font-size:30px;
+}
+
+#glowTitle{
+text-align:center;
+margin-top:60px;
+font-size:50px;
+text-shadow:0 0 20px white;
+}
+
+#statsBox{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+padding:40px;
+margin-top:30px;
+}
+
+.stat{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.2);
+padding:20px;
+border-radius:15px;
+text-align:center;
+transition:.3s;
+}
+
+.stat:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px white;
+}
+
+.bigNumber{
+font-size:40px;
+font-weight:bold;
+}
+
+#bootText{
+text-align:center;
+margin-top:20px;
+opacity:.7;
+}
+
+#scanLine{
+position:absolute;
+width:100%;
+height:2px;
+background:white;
+top:0;
+left:0;
+animation:scan 3s linear infinite;
+opacity:.3;
+}
+
+@keyframes scan{
+0%{top:0;}
+100%{top:100%;}
+}
+</style>
+
+<button id="openNeon">⚡</button>
+
+<div id="neonPanel">
+<div id="scanLine"></div>
+
+<h1 id="glowTitle">SISTEMA JOEL-X</h1>
+
+<div id="bootText">Inicializando núcleo...</div>
+
+<div id="statsBox">
+
+<div class="stat">
+<p>ENERGÍA</p>
+<div class="bigNumber" id="energia">0%</div>
+</div>
+
+<div class="stat">
+<p>ESTABILIDAD</p>
+<div class="bigNumber" id="estabilidad">0%</div>
+</div>
+
+<div class="stat">
+<p>SEÑAL</p>
+<div class="bigNumber" id="senal">0%</div>
+</div>
+
+<div class="stat">
+<p>ACCESO</p>
+<div class="bigNumber" id="acceso">BLOQUEADO</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const panel=document.getElementById("neonPanel");
+const btn=document.getElementById("openNeon");
+
+btn.onclick=()=>{
+
+panel.style.display="block";
+
+let e=0,s=0,a=0;
+
+let carga=setInterval(()=>{
+
+e+=2;
+s+=1;
+a+=3;
+
+document.getElementById("energia").innerText=e+"%";
+document.getElementById("estabilidad").innerText=s+"%";
+document.getElementById("senal").innerText=a+"%";
+
+if(e>=100){
+
+clearInterval(carga);
+
+document.getElementById("acceso").innerText="LIBERADO";
+document.getElementById("bootText").innerText="Sistema activado correctamente.";
+
+document.getElementById("glowTitle").innerText="BIENVENIDO JOEL";
+
+}
+
+},50);
+
+};
+
+</script>
 </body>
 </html>
